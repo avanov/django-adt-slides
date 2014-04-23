@@ -1,0 +1,109 @@
+-inherit base.plim
+
+
+section
+    h3 Declarative programming and ADT in use in Django
+
+section
+    | Goal: Проверить как можно больше и как можно раньше
+
+
+section
+    | Purpose of Declarative API: скрывать boilerplate и контролировать согласованность, позволить нам
+      сосредоточиться на главном
+      http://youtu.be/nRDC6GtfB4g
+
+
+section
+    h4 Libraries
+    ul
+        li: a href="https://github.com/lihaoyi/macropy" github.com/lihaoyi/macropy
+        li: a href="https://github.com/benanhalt/PyAlgebraicDataTypes" github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)
+
+
+section
+    h4 Strategy map
+    pre: code
+        | {'store:articles': <class 'tests.testapp.testapp.articles.models.GermanArticle'>}
+          [16/Apr/2014 19:29:59] "GET /articles/de HTTP/1.1" 200 18
+          {'store:articles': <class 'tests.testapp.testapp.articles.models.EnglishArticle'>}
+          [16/Apr/2014 19:30:17] "GET /articles/en HTTP/1.1" 200 18
+
+
+section
+    section
+        h4 OCaml ADT example
+        | Find and watch it at `br`
+          `a href="http://youtu.be/hKcOkWzj0_s?t=31m6s" http://youtu.be/hKcOkWzj0_s?t=31m6s`
+
+    section(data-markdown)
+        script type="text/template"
+            #### OCaml ADT example
+
+            ```ocaml
+            (* Two product types *)
+            type order = { id: int; price: float; size: int; }
+            type cancel = { xid: int; }
+            ```
+
+    section(data-markdown)
+        script type="text/template"
+            #### OCaml ADT example
+
+            ```ocaml
+            (* define tags *)
+            type instruction =
+               | Order of order
+               | Cancel of cancel
+            ```
+
+
+    section
+        h4 OCaml ADT example
+        pre: code.language-ocaml
+            | let filter_by_oid instructions oid =
+                 List.filter instructions
+                     (fun x -> match x with
+                               | Order o -> o.id = oid
+                               | Cancel c -> c.xid = oid)
+                 ;;
+
+    section
+        p
+            pre: code.language-ocaml(data-trim)
+                | (* Two product types *)
+                  type order = { id: int; price: float; size: int; }
+                  type cancel = { xid: int; }
+
+        p.fragment
+            pre: code(data-trim)
+                | type cancel_replace = { xr_id: int; new_price: float; new_size: int; }
+
+
+    section(data-markdown)
+        script type="text/template"
+            #### OCaml ADT example
+
+            ```ocaml
+            let filter_by_oid instructions oid =
+                List.filter instructions
+                    (fun x -> match x with
+                              | Order o -> o.id = oid
+                              | Cancel c -> c.xid = oid)
+                ;;
+
+            Warning P: This pattern-matching is not exhaustive
+            Here is an example of a value that is not matched...
+            ```
+
+
+section
+    pre
+        code
+            | '/articles/{language}'
+              ^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']
+
+section
+    h4 Use in tickets
+    | Bill implements -> @Language.ENGLISH('store:articles')
+    | John implements- > @Language.GERMAN('store:articles')
