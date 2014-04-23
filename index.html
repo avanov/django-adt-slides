@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html><html lang="en"><head><meta charset="utf-8"/><title>reveal.js - The HTML Presentation Framework</title><meta name="description" content="A framework for easily creating beautiful presentations using HTML"/><meta name="author" content="Hakim El Hattab"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/><meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/><link rel="stylesheet" href="css/reveal.min.css"/><link rel="stylesheet" href="css/theme/serif.css" id="theme"/><link rel="stylesheet" href="lib/css/zenburn.css"/><script>
 if( window.location.search.match( /print-pdf/gi ) ) {
 	var link = document.createElement( 'link' );
@@ -8,36 +10,109 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 }</script><!--[if lt IE 9]>
 <script src="lib/js/html5shiv.js">
 </script><![endif]-->
-</head><body><div class="reveal"><div class="slides"><section><h3>Declarative programming and ADT in use in Django</h3></section><section>Goal: Проверить как можно больше и как можно раньше</section><section>Purpose of Declarative API: скрывать boilerplate и контролировать согласованность, позволить нам
+<style>
+.source .hll { background-color: #ffffcc }
+.source  { background: #f0f3f3; }
+.source .c { color: #0099FF; font-style: italic } /* Comment */
+.source .err { color: #AA0000; background-color: #FFAAAA } /* Error */
+.source .k { color: #006699; font-weight: bold } /* Keyword */
+.source .o { color: #555555 } /* Operator */
+.source .cm { color: #0099FF; font-style: italic } /* Comment.Multiline */
+.source .cp { color: #009999 } /* Comment.Preproc */
+.source .c1 { color: #0099FF; font-style: italic } /* Comment.Single */
+.source .cs { color: #0099FF; font-weight: bold; font-style: italic } /* Comment.Special */
+.source .gd { background-color: #FFCCCC; border: 1px solid #CC0000 } /* Generic.Deleted */
+.source .ge { font-style: italic } /* Generic.Emph */
+.source .gr { color: #FF0000 } /* Generic.Error */
+.source .gh { color: #003300; font-weight: bold } /* Generic.Heading */
+.source .gi { background-color: #CCFFCC; border: 1px solid #00CC00 } /* Generic.Inserted */
+.source .go { color: #AAAAAA } /* Generic.Output */
+.source .gp { color: #000099; font-weight: bold } /* Generic.Prompt */
+.source .gs { font-weight: bold } /* Generic.Strong */
+.source .gu { color: #003300; font-weight: bold } /* Generic.Subheading */
+.source .gt { color: #99CC66 } /* Generic.Traceback */
+.source .kc { color: #006699; font-weight: bold } /* Keyword.Constant */
+.source .kd { color: #006699; font-weight: bold } /* Keyword.Declaration */
+.source .kn { color: #006699; font-weight: bold } /* Keyword.Namespace */
+.source .kp { color: #006699 } /* Keyword.Pseudo */
+.source .kr { color: #006699; font-weight: bold } /* Keyword.Reserved */
+.source .kt { color: #007788; font-weight: bold } /* Keyword.Type */
+.source .m { color: #FF6600 } /* Literal.Number */
+.source .s { color: #CC3300 } /* Literal.String */
+.source .na { color: #330099 } /* Name.Attribute */
+.source .nb { color: #336666 } /* Name.Builtin */
+.source .nc { color: #00AA88; font-weight: bold } /* Name.Class */
+.source .no { color: #336600 } /* Name.Constant */
+.source .nd { color: #9999FF } /* Name.Decorator */
+.source .ni { color: #999999; font-weight: bold } /* Name.Entity */
+.source .ne { color: #CC0000; font-weight: bold } /* Name.Exception */
+.source .nf { color: #CC00FF } /* Name.Function */
+.source .nl { color: #9999FF } /* Name.Label */
+.source .nn { color: #00CCFF; font-weight: bold } /* Name.Namespace */
+.source .nt { color: #330099; font-weight: bold } /* Name.Tag */
+.source .nv { color: #003333 } /* Name.Variable */
+.source .ow { color: #000000; font-weight: bold } /* Operator.Word */
+.source .w { color: #bbbbbb } /* Text.Whitespace */
+.source .mf { color: #FF6600 } /* Literal.Number.Float */
+.source .mh { color: #FF6600 } /* Literal.Number.Hex */
+.source .mi { color: #FF6600 } /* Literal.Number.Integer */
+.source .mo { color: #FF6600 } /* Literal.Number.Oct */
+.source .sb { color: #CC3300 } /* Literal.String.Backtick */
+.source .sc { color: #CC3300 } /* Literal.String.Char */
+.source .sd { color: #CC3300; font-style: italic } /* Literal.String.Doc */
+.source .s2 { color: #CC3300 } /* Literal.String.Double */
+.source .se { color: #CC3300; font-weight: bold } /* Literal.String.Escape */
+.source .sh { color: #CC3300 } /* Literal.String.Heredoc */
+.source .si { color: #AA0000 } /* Literal.String.Interpol */
+.source .sx { color: #CC3300 } /* Literal.String.Other */
+.source .sr { color: #33AAAA } /* Literal.String.Regex */
+.source .s1 { color: #CC3300 } /* Literal.String.Single */
+.source .ss { color: #FFCC33 } /* Literal.String.Symbol */
+.source .bp { color: #336666 } /* Name.Builtin.Pseudo */
+.source .vc { color: #003333 } /* Name.Variable.Class */
+.source .vg { color: #003333 } /* Name.Variable.Global */
+.source .vi { color: #003333 } /* Name.Variable.Instance */
+.source .il { color: #FF6600 } /* Literal.Number.Integer.Long */
+.source PRE {
+    padding:1em;
+    box-shadow:0;
+}</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative programming and ADT in use in Django</h3><br/><h5>Maxim Avanov</h5></section><section>Goal: Проверить как можно больше и как можно раньше</section><section>Purpose of Declarative API: скрывать boilerplate и контролировать согласованность, позволить нам
 сосредоточиться на главном
-http://youtu.be/nRDC6GtfB4g</section><section><h4>Libraries</h4><ul><li><a href="https://github.com/lihaoyi/macropy">github.com/lihaoyi/macropy</a></li><li><a href="https://github.com/benanhalt/PyAlgebraicDataTypes">github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)</a></li></ul></section><section><h4>Strategy map</h4><pre><code>{'store:articles': <class 'tests.testapp.testapp.articles.models.GermanArticle'>}
-[16/Apr/2014 19:29:59] "GET /articles/de HTTP/1.1" 200 18
-{'store:articles': <class 'tests.testapp.testapp.articles.models.EnglishArticle'>}
-[16/Apr/2014 19:30:17] "GET /articles/en HTTP/1.1" 200 18</code></pre></section><section><section><h4>OCaml ADT example</h4>Find and watch it at <br/>
-<a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></section><section data-markdown="data-markdown"><script type="text/template">
+http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraints</h2></section><section>
 
-```ocaml
-(* Two product types *)
+<div class="source"><pre><span class="k">def</span> <span class="nf">a_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ExampleForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+            <span class="n">process_data</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/success/&#39;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ExampleForm</span><span class="p">()</span>
+
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;example.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
+</pre></div>
+</section><section><h2>ADT</h2></section><section><section><h4>OCaml ADT example</h4>Find and watch it at <br/>
+<a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">(* Two product types *)
 type order = { id: int; price: float; size: int; }
-type cancel = { xid: int; }
-```</script></section><section data-markdown="data-markdown"><script type="text/template">
-
-```ocaml
-(* define tags *)
+type cancel = { xid: int; }</code></pre></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">(* define tags *)
 type instruction =
    | Order of order
-   | Cancel of cancel
-```</script></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">let filter_by_oid instructions oid =
+   | Cancel of cancel</code></pre></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">let filter_by_oid instructions oid =
 List.filter instructions
     (fun x -> match x with
               | Order o -> o.id = oid
               | Cancel c -> c.xid = oid)
-;;</code></pre></section><section><p><pre><code data-trim="data-trim" class="language-ocaml">(* Two product types *)
-type order = { id: int; price: float; size: int; }
-type cancel = { xid: int; }</code></pre></p><p class="fragment"><pre><code data-trim="data-trim">type cancel_replace = { xr_id: int; new_price: float; new_size: int; }</code></pre></p></section><section data-markdown="data-markdown"><script type="text/template">
+;;</code></pre></section><section>
 
-```ocaml
-let filter_by_oid instructions oid =
+<div class="source"><pre><span class="c">(* Two product types *)</span>
+<span class="k">type</span> <span class="n">order</span> <span class="o">=</span> <span class="o">{</span> <span class="n">id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
+<span class="k">type</span> <span class="n">cancel</span> <span class="o">=</span> <span class="o">{</span> <span class="n">xid</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
+</pre></div>
+<span class="fragment">
+
+<div class="source"><pre><span class="k">type</span> <span class="n">cancel_replace</span> <span class="o">=</span> <span class="o">{</span> <span class="n">xr_id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">new_price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">new_size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
+</pre></div>
+</span></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">let filter_by_oid instructions oid =
     List.filter instructions
         (fun x -> match x with
                   | Order o -> o.id = oid
@@ -45,9 +120,92 @@ let filter_by_oid instructions oid =
     ;;
 
 Warning P: This pattern-matching is not exhaustive
-Here is an example of a value that is not matched...
-```</script></section></section><section><pre><code>'/articles/{language}'
-^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']</code></pre></section><section><h4>Use in tickets</h4>Bill implements -> @Language.ENGLISH('store:articles')John implements- > @Language.GERMAN('store:articles')</section></div></div><script src="lib/js/head.min.js">
+Here is an example of a value that is not matched...</code></pre></section></section><section><section><h4>Python ADT example</h4></section><section><h4>Python ADT example</h4><pre><code class="language-python">from django.db import models
+
+class Order(models.Model):
+     tid = models.IntegerField(null=False)
+     price = models.DecimalField(null=False, max_digits=16,
+                                 decimal_places=4, default='0')
+     size = models.IntegerField(null=False, default=0)
+
+class Cancel(models.Model):
+    xtid = models.IntegerField(null=False)
+
+class CancelReplace(models.Model):
+    xr_tid = models.IntegerField(null=False)
+    new_price = models.DecimalField(null=False, max_digits=16,
+                                    decimal_places=4, default='0')
+    new_size = models.IntegerField(null=False, default=0)</code></pre></section><section><h4>Python ADT example</h4><pre><code class="language-python">from rhetoric.adt import adt
+
+class Instruction(adt):
+    ORDER = Order
+    CANCEL = Cancel
+    CANCEL_REPLACE = CancelReplace</code></pre></section><section><h4>Python ADT example</h4><pre><code class="language-python">@Instruction.ORDER('filter_by_oid')
+def filter_order_by_oid(order, oid):
+    return order.tid == oid
+
+@Instruction.CANCEL('filter_by_oid')
+def filter_cancel_by_oid(cancel, oid):
+    return cancel.xtid == oid
+
+@Instruction.CANCEL_REPLACE('filter_by_oid')
+def filter_cancel_replace_by_oid(cr, oid):
+    return cr.xr_tid == oid
+
+def filter_by_oid(instructions, oid):
+    return list(filter(
+        lambda i: Instruction.match(i)['filter_by_oid'](i, oid),
+        instructions))</code></pre></section><section><h4>Python ADT example | Alternate</h4><pre><code class="language-python">inline_matcher = Instruction.inline_match(
+    ORDER = lambda o, oid: o.tid == oid,
+    CANCEL = lambda c, oid: c.xtid == oid,
+    CANCEL_REPLACE = lambda cr, oid: cr.xr_tid == oid)
+
+def filter_by_oid_alt(instructions, oid):
+    return list(filter(lambda i: inline_matcher(i)(i, oid),
+                       instructions))</code></pre></section></section><section><section><h2>Use case</h2></section><section><h4>Use case | Define ADT</h4><pre><code class="language-python">from rhetoric.adt import adt
+
+class Language(adt):
+    ENGLISH = 'en'
+    GERMAN = 'de'</code></pre></section><section><h4>Use case | Register Models</h4><pre><code class="language-python">from django.db import models
+from ..types import Language
+
+class AbstractRegionalArticle(models.Model):
+    class Meta:
+        abstract = True
+    title = models.CharField(max_length=250, null=False, default='')
+    text = models.TextField(null=False, default='')
+
+@Language.ENGLISH('store:articles')
+class EnglishArticle(AbstractRegionalArticle):
+    pass
+
+@Language.GERMAN('store:articles')
+class GermanArticle(AbstractRegionalArticle):
+    pass</code></pre></section><section><h4>Use case | Guard boundaries</h4><pre><code class="language-python">from ..types import Language
+
+def includeme(config):
+    RULES = {
+        'language': Language
+    }
+    config.add_route('articles.regional.index', '/articles/{language}', rules=RULES)</code></pre><pre><code>^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']</code></pre></section><section><h4>Use case | Process requests</h4><pre><code class="language-python">from rhetoric.view import view_config, view_defaults
+from ..types import Language
+
+@view_defaults(route_name='articles.regional.index', renderer='json')
+class ArticlesHandler(object):
+    def __init__(self, request, language):
+        self.request = request
+        self.language = language
+        self.region_strategy = Language.match(language)
+
+    @view_config(request_method='GET')
+    def show_local_entries(self):
+        return {
+            'language': self.language,
+        }</code></pre></section><section><h4>Use case | Strategy map</h4><pre><code>GET /articles/de HTTP/1.1
+{'store:articles': <class 'tests.testapp.testapp.articles.models.GermanArticle'>}
+
+GET /articles/en HTTP/1.1
+{'store:articles': <class 'tests.testapp.testapp.articles.models.EnglishArticle'>}</code></pre></section></section><section><h4>Libraries</h4><ul><li><a href="https://github.com/lihaoyi/macropy">github.com/lihaoyi/macropy</a></li><li><a href="https://github.com/benanhalt/PyAlgebraicDataTypes">github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)</a></li></ul></section><section><h4>Use in tickets</h4>Bill implements -> @Language.ENGLISH('store:articles')John implements- > @Language.GERMAN('store:articles')</section></div></div><script src="lib/js/head.min.js">
 </script><script src="js/reveal.min.js">
 </script><script>
 // Full list of configuration options available here:

@@ -3,6 +3,8 @@
 
 section
     h3 Declarative programming and ADT in use in Django
+    br
+    h5 Maxim Avanov
 
 section
     | Goal: Проверить как можно больше и как можно раньше
@@ -13,22 +15,14 @@ section
       сосредоточиться на главном
       http://youtu.be/nRDC6GtfB4g
 
+section
+    h2 Constraints
 
 section
-    h4 Libraries
-    ul
-        li: a href="https://github.com/lihaoyi/macropy" github.com/lihaoyi/macropy
-        li: a href="https://github.com/benanhalt/PyAlgebraicDataTypes" github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)
-
+    == self.code_block('python', 'slide1.py')
 
 section
-    h4 Strategy map
-    pre: code
-        | {'store:articles': <class 'tests.testapp.testapp.articles.models.GermanArticle'>}
-          [16/Apr/2014 19:29:59] "GET /articles/de HTTP/1.1" 200 18
-          {'store:articles': <class 'tests.testapp.testapp.articles.models.EnglishArticle'>}
-          [16/Apr/2014 19:30:17] "GET /articles/en HTTP/1.1" 200 18
-
+    h2 ADT
 
 section
     section
@@ -36,27 +30,22 @@ section
         | Find and watch it at `br`
           `a href="http://youtu.be/hKcOkWzj0_s?t=31m6s" http://youtu.be/hKcOkWzj0_s?t=31m6s`
 
-    section(data-markdown)
-        script type="text/template"
-            #### OCaml ADT example
+    section
+        h4 OCaml ADT example
+        pre: code.language-ocaml
+            |
+                (* Two product types *)
+                type order = { id: int; price: float; size: int; }
+                type cancel = { xid: int; }
 
-            ```ocaml
-            (* Two product types *)
-            type order = { id: int; price: float; size: int; }
-            type cancel = { xid: int; }
-            ```
-
-    section(data-markdown)
-        script type="text/template"
-            #### OCaml ADT example
-
-            ```ocaml
-            (* define tags *)
-            type instruction =
-               | Order of order
-               | Cancel of cancel
-            ```
-
+    section
+        h4 OCaml ADT example
+        pre: code.language-ocaml
+            |
+                (* define tags *)
+                type instruction =
+                   | Order of order
+                   | Cancel of cancel
 
     section
         h4 OCaml ADT example
@@ -69,39 +58,185 @@ section
                  ;;
 
     section
-        p
-            pre: code.language-ocaml(data-trim)
-                | (* Two product types *)
-                  type order = { id: int; price: float; size: int; }
-                  type cancel = { xid: int; }
+        == self.code_block('ocaml', 'two_products.ml')
 
-        p.fragment
-            pre: code(data-trim)
-                | type cancel_replace = { xr_id: int; new_price: float; new_size: int; }
+        span.fragment
+            == self.code_block('ocaml', 'third_product.ml')
 
 
-    section(data-markdown)
-        script type="text/template"
-            #### OCaml ADT example
+    section
+        h4 OCaml ADT example
+        pre: code.language-ocaml
+            |
+                let filter_by_oid instructions oid =
+                    List.filter instructions
+                        (fun x -> match x with
+                                  | Order o -> o.id = oid
+                                  | Cancel c -> c.xid = oid)
+                    ;;
 
-            ```ocaml
-            let filter_by_oid instructions oid =
-                List.filter instructions
-                    (fun x -> match x with
-                              | Order o -> o.id = oid
-                              | Cancel c -> c.xid = oid)
-                ;;
+                Warning P: This pattern-matching is not exhaustive
+                Here is an example of a value that is not matched...
 
-            Warning P: This pattern-matching is not exhaustive
-            Here is an example of a value that is not matched...
-            ```
+section
+    section
+        h4 Python ADT example
+
+    section
+        h4 Python ADT example
+        pre: code.language-python
+            |
+                from django.db import models
+
+                class Order(models.Model):
+                     tid = models.IntegerField(null=False)
+                     price = models.DecimalField(null=False, max_digits=16,
+                                                 decimal_places=4, default='0')
+                     size = models.IntegerField(null=False, default=0)
+
+                class Cancel(models.Model):
+                    xtid = models.IntegerField(null=False)
+
+                class CancelReplace(models.Model):
+                    xr_tid = models.IntegerField(null=False)
+                    new_price = models.DecimalField(null=False, max_digits=16,
+                                                    decimal_places=4, default='0')
+                    new_size = models.IntegerField(null=False, default=0)
+
+
+    section
+        h4 Python ADT example
+        pre: code.language-python
+            |
+                from rhetoric.adt import adt
+
+                class Instruction(adt):
+                    ORDER = Order
+                    CANCEL = Cancel
+                    CANCEL_REPLACE = CancelReplace
+
+    section
+        h4 Python ADT example
+        pre: code.language-python
+            |
+                @Instruction.ORDER('filter_by_oid')
+                def filter_order_by_oid(order, oid):
+                    return order.tid == oid
+
+                @Instruction.CANCEL('filter_by_oid')
+                def filter_cancel_by_oid(cancel, oid):
+                    return cancel.xtid == oid
+
+                @Instruction.CANCEL_REPLACE('filter_by_oid')
+                def filter_cancel_replace_by_oid(cr, oid):
+                    return cr.xr_tid == oid
+
+                def filter_by_oid(instructions, oid):
+                    return list(filter(
+                        lambda i: Instruction.match(i)['filter_by_oid'](i, oid),
+                        instructions))
+
+    section
+        h4 Python ADT example | Alternate
+        pre: code.language-python
+            |
+                inline_matcher = Instruction.inline_match(
+                    ORDER = lambda o, oid: o.tid == oid,
+                    CANCEL = lambda c, oid: c.xtid == oid,
+                    CANCEL_REPLACE = lambda cr, oid: cr.xr_tid == oid)
+
+                def filter_by_oid_alt(instructions, oid):
+                    return list(filter(lambda i: inline_matcher(i)(i, oid),
+                                       instructions))
+
+section
+    section
+        h2 Use case
+
+    section
+        h4 Use case | Define ADT
+        pre: code.language-python
+            |
+                from rhetoric.adt import adt
+
+                class Language(adt):
+                    ENGLISH = 'en'
+                    GERMAN = 'de'
+
+    section
+        h4 Use case | Register Models
+        pre: code.language-python
+            |
+                from django.db import models
+                from ..types import Language
+
+                class AbstractRegionalArticle(models.Model):
+                    class Meta:
+                        abstract = True
+                    title = models.CharField(max_length=250, null=False, default='')
+                    text = models.TextField(null=False, default='')
+
+                @Language.ENGLISH('store:articles')
+                class EnglishArticle(AbstractRegionalArticle):
+                    pass
+
+                @Language.GERMAN('store:articles')
+                class GermanArticle(AbstractRegionalArticle):
+                    pass
+
+    section
+        h4 Use case | Guard boundaries
+        pre: code.language-python
+            |
+                from ..types import Language
+
+                def includeme(config):
+                    RULES = {
+                        'language': Language
+                    }
+                    config.add_route('articles.regional.index', '/articles/{language}', rules=RULES)
+
+        pre: code
+            |
+              ^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']
+
+    section
+        h4 Use case | Process requests
+        pre: code.language-python
+            |
+                from rhetoric.view import view_config, view_defaults
+                from ..types import Language
+
+                @view_defaults(route_name='articles.regional.index', renderer='json')
+                class ArticlesHandler(object):
+                    def __init__(self, request, language):
+                        self.request = request
+                        self.language = language
+                        self.region_strategy = Language.match(language)
+
+                    @view_config(request_method='GET')
+                    def show_local_entries(self):
+                        return {
+                            'language': self.language,
+                        }
+
+    section
+        h4 Use case | Strategy map
+        pre: code
+            |
+              GET /articles/de HTTP/1.1
+              {'store:articles': <class 'tests.testapp.testapp.articles.models.GermanArticle'>}
+
+              GET /articles/en HTTP/1.1
+              {'store:articles': <class 'tests.testapp.testapp.articles.models.EnglishArticle'>}
 
 
 section
-    pre
-        code
-            | '/articles/{language}'
-              ^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']
+    h4 Libraries
+    ul
+        li: a href="https://github.com/lihaoyi/macropy" github.com/lihaoyi/macropy
+        li: a href="https://github.com/benanhalt/PyAlgebraicDataTypes" github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)
+
 
 section
     h4 Use in tickets

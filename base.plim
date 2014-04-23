@@ -1,3 +1,18 @@
+---!
+    import codecs
+    from pygments import highlight
+    from pygments.lexers import get_lexer_by_name
+    from pygments.formatters import HtmlFormatter
+
+-def code_block(language, code_id, linenos=False)
+    ---
+        lexer = get_lexer_by_name(language, stripall=True)
+        formatter = HtmlFormatter(linenos=linenos, cssclass="source")
+        with codecs.open('code/{}'.format(code_id), 'rb', 'utf-8') as f:
+            code = f.read()
+        result = highlight(code, lexer, formatter)
+    == result
+
 doctype html
 html lang="en"
 
@@ -33,6 +48,12 @@ html lang="en"
 		<!--[if lt IE 9]>
 		script src="lib/js/html5shiv.js"
 		<![endif]-->
+		style
+            ${HtmlFormatter(style='manni').get_style_defs('.source')|n}
+            .source PRE {
+                padding:1em;
+                box-shadow:0;
+            }
 
 	body
         .reveal: .slides = next.body()
