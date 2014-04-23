@@ -76,6 +76,11 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 .source PRE {
     padding:1em;
     box-shadow:0;
+}
+
+.reveal PRE CODE {
+    font-size: 0.80em;
+    line-height: 1.2em;
 }</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative programming and ADT in use in Django</h3><br/><h5>Maxim Avanov</h5></section><section>Goal: Проверить как можно больше и как можно раньше</section><section>Purpose of Declarative API: скрывать boilerplate и контролировать согласованность, позволить нам
 сосредоточиться на главном
 http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraints</h2></section><section>
@@ -92,17 +97,19 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraints</h2></section><sec
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;example.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
 </pre></div>
 </section><section><h2>ADT</h2></section><section><section><h4>OCaml ADT example</h4>Find and watch it at <br/>
-<a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">(* Two product types *)
-type order = { id: int; price: float; size: int; }
-type cancel = { xid: int; }</code></pre></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">(* define tags *)
+<a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">type order = { id: int; price: float; size: int; }
+type cancel = { xid: int; }
+
 type instruction =
    | Order of order
-   | Cancel of cancel</code></pre></section><section><h4>OCaml ADT example</h4><pre><code class="language-ocaml">let filter_by_oid instructions oid =
-List.filter instructions
-    (fun x -> match x with
-              | Order o -> o.id = oid
-              | Cancel c -> c.xid = oid)
-;;</code></pre></section><section>
+   | Cancel of cancel
+
+let filter_by_oid instructions oid =
+    List.filter instructions
+        (fun x -> match x with
+                  | Order o -> o.id = oid
+                  | Cancel c -> c.xid = oid)
+     ;;</code></pre></section><section>
 
 <div class="source"><pre><span class="c">(* Two product types *)</span>
 <span class="k">type</span> <span class="n">order</span> <span class="o">=</span> <span class="o">{</span> <span class="n">id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
@@ -120,7 +127,7 @@ List.filter instructions
     ;;
 
 Warning P: This pattern-matching is not exhaustive
-Here is an example of a value that is not matched...</code></pre></section></section><section><section><h4>Python ADT example</h4></section><section><h4>Python ADT example</h4><pre><code class="language-python">from django.db import models
+Here is an example of a value that is not matched...</code></pre></section></section><section><h2>Trying to reproduce</h2></section><section><section><h4>Python ADT example</h4></section><section><h4>Python ADT example</h4><pre><code class="language-python">from django.db import models
 
 class Order(models.Model):
      tid = models.IntegerField(null=False)
@@ -162,32 +169,35 @@ def filter_by_oid(instructions, oid):
 
 def filter_by_oid_alt(instructions, oid):
     return list(filter(lambda i: inline_matcher(i)(i, oid),
-                       instructions))</code></pre></section></section><section><section><h2>Use case</h2></section><section><h4>Use case | Define ADT</h4><pre><code class="language-python">from rhetoric.adt import adt
+                       instructions))</code></pre></section></section><section><section><h2>Use case</h2><span class="fragment"><hr/><h4>Multilingual content</h4></span></section><section><h4>Use case | Define ADT</h4><pre><code class="language-python">from rhetoric.adt import adt
 
 class Language(adt):
     ENGLISH = 'en'
     GERMAN = 'de'</code></pre></section><section><h4>Use case | Register Models</h4><pre><code class="language-python">from django.db import models
 from ..types import Language
 
-class AbstractRegionalArticle(models.Model):
+
+class IRegionalArticle(models.Model):
     class Meta:
         abstract = True
     title = models.CharField(max_length=250, null=False, default='')
     text = models.TextField(null=False, default='')
 
+
 @Language.ENGLISH('store:articles')
-class EnglishArticle(AbstractRegionalArticle):
+class EnglishArticle(IRegionalArticle):
     pass
 
+
 @Language.GERMAN('store:articles')
-class GermanArticle(AbstractRegionalArticle):
+class GermanArticle(IRegionalArticle):
     pass</code></pre></section><section><h4>Use case | Guard boundaries</h4><pre><code class="language-python">from ..types import Language
 
 def includeme(config):
     RULES = {
         'language': Language
     }
-    config.add_route('articles.regional.index', '/articles/{language}', rules=RULES)</code></pre><pre><code>^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']</code></pre></section><section><h4>Use case | Process requests</h4><pre><code class="language-python">from rhetoric.view import view_config, view_defaults
+    config.add_route('articles.regional.index', '/articles/{language}', rules=RULES)</code></pre><span class="fragment"><pre><code>^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']</code></pre></span></section><section><h4>Use case | Process requests</h4><pre><code class="language-python">from rhetoric.view import view_config, view_defaults
 from ..types import Language
 
 @view_defaults(route_name='articles.regional.index', renderer='json')

@@ -55,6 +55,11 @@ html lang="en"
                 box-shadow:0;
             }
 
+            .reveal PRE CODE {
+                font-size: 0.80em;
+                line-height: 1.2em;
+            }
+
 	body
         .reveal: .slides = next.body()
 

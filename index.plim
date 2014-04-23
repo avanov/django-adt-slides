@@ -34,28 +34,20 @@ section
         h4 OCaml ADT example
         pre: code.language-ocaml
             |
-                (* Two product types *)
                 type order = { id: int; price: float; size: int; }
                 type cancel = { xid: int; }
 
-    section
-        h4 OCaml ADT example
-        pre: code.language-ocaml
-            |
-                (* define tags *)
                 type instruction =
                    | Order of order
                    | Cancel of cancel
 
-    section
-        h4 OCaml ADT example
-        pre: code.language-ocaml
-            | let filter_by_oid instructions oid =
-                 List.filter instructions
-                     (fun x -> match x with
-                               | Order o -> o.id = oid
-                               | Cancel c -> c.xid = oid)
-                 ;;
+                let filter_by_oid instructions oid =
+                    List.filter instructions
+                        (fun x -> match x with
+                                  | Order o -> o.id = oid
+                                  | Cancel c -> c.xid = oid)
+                     ;;
+
 
     section
         == self.code_block('ocaml', 'two_products.ml')
@@ -77,6 +69,9 @@ section
 
                 Warning P: This pattern-matching is not exhaustive
                 Here is an example of a value that is not matched...
+
+section
+    h2 Trying to reproduce
 
 section
     section
@@ -152,6 +147,9 @@ section
 section
     section
         h2 Use case
+        span.fragment
+            hr
+            h4 Multilingual content
 
     section
         h4 Use case | Define ADT
@@ -170,18 +168,21 @@ section
                 from django.db import models
                 from ..types import Language
 
-                class AbstractRegionalArticle(models.Model):
+
+                class IRegionalArticle(models.Model):
                     class Meta:
                         abstract = True
                     title = models.CharField(max_length=250, null=False, default='')
                     text = models.TextField(null=False, default='')
 
+
                 @Language.ENGLISH('store:articles')
-                class EnglishArticle(AbstractRegionalArticle):
+                class EnglishArticle(IRegionalArticle):
                     pass
 
+
                 @Language.GERMAN('store:articles')
-                class GermanArticle(AbstractRegionalArticle):
+                class GermanArticle(IRegionalArticle):
                     pass
 
     section
@@ -196,9 +197,10 @@ section
                     }
                     config.add_route('articles.regional.index', '/articles/{language}', rules=RULES)
 
-        pre: code
-            |
-              ^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']
+        span.fragment
+            pre: code
+                |
+                  ^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']
 
     section
         h4 Use case | Process requests
