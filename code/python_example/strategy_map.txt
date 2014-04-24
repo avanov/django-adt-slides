@@ -1,0 +1,7 @@
+# self.language_strategy = Language.match(language)
+
+GET /articles/de
+{'db:articles': <class 'tests.testapp.testapp.articles.models.GermanArticle'>}
+
+GET /articles/en
+{'db:articles': <class 'tests.testapp.testapp.articles.models.EnglishArticle'>}

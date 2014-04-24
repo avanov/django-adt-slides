@@ -2,12 +2,18 @@
 
 
 section
-    h3 Declarative programming and ADT in use in Django
-    br
+    h2 Declarative programming and ADT in use in Django
+    br: hr: br
     h5 Maxim Avanov
+    h5: a href="https://maximavanov.com/" maximavanov.com
 
 section
-    | Goal: Проверить как можно больше и как можно раньше
+    h2 Purpose
+    span.fragment
+        hr
+        h3 To check as much as possible...
+        span.fragment
+            h3 ...and as soon as possible
 
 
 section
@@ -16,7 +22,7 @@ section
       http://youtu.be/nRDC6GtfB4g
 
 section
-    h2 Constraints
+    h2 Constraint programming
 
 section
     == self.code_block('python', 'slide1.py')
@@ -26,123 +32,53 @@ section
 
 section
     section
-        h4 OCaml ADT example
-        | Find and watch it at `br`
-          `a href="http://youtu.be/hKcOkWzj0_s?t=31m6s" http://youtu.be/hKcOkWzj0_s?t=31m6s`
-
-    section
-        h4 OCaml ADT example
-        pre: code.language-ocaml
-            |
-                type order = { id: int; price: float; size: int; }
-                type cancel = { xid: int; }
-
-                type instruction =
-                   | Order of order
-                   | Cancel of cancel
-
-                let filter_by_oid instructions oid =
-                    List.filter instructions
-                        (fun x -> match x with
-                                  | Order o -> o.id = oid
-                                  | Cancel c -> c.xid = oid)
-                     ;;
-
-
-    section
-        == self.code_block('ocaml', 'two_products.ml')
-
+        h2 OCaml ADT example
         span.fragment
-            == self.code_block('ocaml', 'third_product.ml')
+            hr
+               | Watch a "Caml Trading" talk by Yaron Minsky at `br`
+                 `a href="http://youtu.be/hKcOkWzj0_s?t=31m6s" http://youtu.be/hKcOkWzj0_s?t=31m6s`
+
+    section
+        h2 OCaml ADT example
+        == self.code_block('ocaml', 'filter_by_oid.ml')
+
+    section
+        h3 OCaml ADT example
+        == self.code_block('ocaml', 'two_products.ml')
+        span.fragment == self.code_block('ocaml', 'third_product.ml')
 
 
     section
-        h4 OCaml ADT example
-        pre: code.language-ocaml
-            |
-                let filter_by_oid instructions oid =
-                    List.filter instructions
-                        (fun x -> match x with
-                                  | Order o -> o.id = oid
-                                  | Cancel c -> c.xid = oid)
-                    ;;
+        h2 OCaml ADT example
+        == self.code_block('ocaml', 'filter_by_oid_with_warning.ml')
 
-                Warning P: This pattern-matching is not exhaustive
-                Here is an example of a value that is not matched...
 
 section
     h2 Trying to reproduce
 
 section
     section
-        h4 Python ADT example
+        h2 Python ADT*
+        br: br
+        span.fragment | * kind of
 
     section
-        h4 Python ADT example
-        pre: code.language-python
-            |
-                from django.db import models
-
-                class Order(models.Model):
-                     tid = models.IntegerField(null=False)
-                     price = models.DecimalField(null=False, max_digits=16,
-                                                 decimal_places=4, default='0')
-                     size = models.IntegerField(null=False, default=0)
-
-                class Cancel(models.Model):
-                    xtid = models.IntegerField(null=False)
-
-                class CancelReplace(models.Model):
-                    xr_tid = models.IntegerField(null=False)
-                    new_price = models.DecimalField(null=False, max_digits=16,
-                                                    decimal_places=4, default='0')
-                    new_size = models.IntegerField(null=False, default=0)
+        h3 Python ADT example
+        == self.code_block('python', 'django_adt/models.py')
 
 
     section
-        h4 Python ADT example
-        pre: code.language-python
-            |
-                from rhetoric.adt import adt
-
-                class Instruction(adt):
-                    ORDER = Order
-                    CANCEL = Cancel
-                    CANCEL_REPLACE = CancelReplace
+        h3 Python ADT example
+        == self.code_block('python', 'django_adt/types.py')
 
     section
-        h4 Python ADT example
-        pre: code.language-python
-            |
-                @Instruction.ORDER('filter_by_oid')
-                def filter_order_by_oid(order, oid):
-                    return order.tid == oid
-
-                @Instruction.CANCEL('filter_by_oid')
-                def filter_cancel_by_oid(cancel, oid):
-                    return cancel.xtid == oid
-
-                @Instruction.CANCEL_REPLACE('filter_by_oid')
-                def filter_cancel_replace_by_oid(cr, oid):
-                    return cr.xr_tid == oid
-
-                def filter_by_oid(instructions, oid):
-                    return list(filter(
-                        lambda i: Instruction.match(i)['filter_by_oid'](i, oid),
-                        instructions))
+        h3 Python ADT example
+        == self.code_block('python', 'django_adt/logic.py')
 
     section
-        h4 Python ADT example | Alternate
-        pre: code.language-python
-            |
-                inline_matcher = Instruction.inline_match(
-                    ORDER = lambda o, oid: o.tid == oid,
-                    CANCEL = lambda c, oid: c.xtid == oid,
-                    CANCEL_REPLACE = lambda cr, oid: cr.xr_tid == oid)
+        h3 Python ADT example | Alternate
+        == self.code_block('python', 'django_adt/logic_alt.py')
 
-                def filter_by_oid_alt(instructions, oid):
-                    return list(filter(lambda i: inline_matcher(i)(i, oid),
-                                       instructions))
 
 section
     section
@@ -152,89 +88,36 @@ section
             h4 Multilingual content
 
     section
-        h4 Use case | Define ADT
-        pre: code.language-python
-            |
-                from rhetoric.adt import adt
-
-                class Language(adt):
-                    ENGLISH = 'en'
-                    GERMAN = 'de'
+        h3 Use case
+        hr: h4 Define ADT
+        == self.code_block('python', 'python_example/types.py')
 
     section
-        h4 Use case | Register Models
-        pre: code.language-python
-            |
-                from django.db import models
-                from ..types import Language
-
-
-                class IRegionalArticle(models.Model):
-                    class Meta:
-                        abstract = True
-                    title = models.CharField(max_length=250, null=False, default='')
-                    text = models.TextField(null=False, default='')
-
-
-                @Language.ENGLISH('store:articles')
-                class EnglishArticle(IRegionalArticle):
-                    pass
-
-
-                @Language.GERMAN('store:articles')
-                class GermanArticle(IRegionalArticle):
-                    pass
+        h3 Use case
+        hr: h4 Register Models
+        == self.code_block('python', 'python_example/models.py')
 
     section
-        h4 Use case | Guard boundaries
-        pre: code.language-python
-            |
-                from ..types import Language
-
-                def includeme(config):
-                    RULES = {
-                        'language': Language
-                    }
-                    config.add_route('articles.regional.index', '/articles/{language}', rules=RULES)
+        h3 Use case
+        hr: h4 Guard boundaries
+        == self.code_block('python', 'python_example/__init__.py')
 
         span.fragment
-            pre: code
-                |
-                  ^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']
+            == self.code_block('text', 'python_example/rules_re.txt')
 
     section
-        h4 Use case | Process requests
-        pre: code.language-python
-            |
-                from rhetoric.view import view_config, view_defaults
-                from ..types import Language
-
-                @view_defaults(route_name='articles.regional.index', renderer='json')
-                class ArticlesHandler(object):
-                    def __init__(self, request, language):
-                        self.request = request
-                        self.language = language
-                        self.region_strategy = Language.match(language)
-
-                    @view_config(request_method='GET')
-                    def show_local_entries(self):
-                        return {
-                            'language': self.language,
-                        }
+        h3 Use case
+        hr: h4 Process requests
+        == self.code_block('python', 'python_example/views.py')
 
     section
-        h4 Use case | Strategy map
-        pre: code
-            |
-              GET /articles/de HTTP/1.1
-              {'store:articles': <class 'tests.testapp.testapp.articles.models.GermanArticle'>}
-
-              GET /articles/en HTTP/1.1
-              {'store:articles': <class 'tests.testapp.testapp.articles.models.EnglishArticle'>}
-
+        h3 Use case
+        hr: h4 Strategy map
+        == self.code_block('text', 'python_example/strategy_map.txt')
 
 section
-    h4 Libraries
+    h2 Worth mentioning
+    hr
     ul
         li: a href="https://github.com/lihaoyi/macropy" github.com/lihaoyi/macropy
         li: a href="https://github.com/benanhalt/PyAlgebraicDataTypes" github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)
@@ -244,3 +127,16 @@ section
     h4 Use in tickets
     | Bill implements -> @Language.ENGLISH('store:articles')
     | John implements- > @Language.GERMAN('store:articles')
+
+section
+    h2 Thank you
+    span.fragment
+        hr: h4 Q & A
+
+section
+    h2 Credits
+    hr
+    ul
+        li `a href="http://youtu.be/hKcOkWzj0_s" "Caml Trading"` talk by Yaron Minsky
+        li `a href="http://rhetoric.readthedocs.org/en/latest/" Rhetoric Project`
+        li `a href="http://docs.pylonsproject.org/projects/venusian/en/latest/" Venusian Project`

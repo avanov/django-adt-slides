@@ -1,0 +1,1 @@
+^articles/(?P<language>(?:de|en))$ [name='articles.regional.index']
