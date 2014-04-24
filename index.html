@@ -81,7 +81,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 .reveal PRE CODE {
     font-size: 0.80em;
     line-height: 1.2em;
-}</style></head><body><div class="reveal"><div class="slides"><section><h2>Declarative programming and ADT in use in Django</h2><br/><hr/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5></section><section><h2>Purpose</h2><span class="fragment"><hr/><h3>To check as much as possible...</h3><span class="fragment"><h3>...and as soon as possible</h3></span></span></section><section>Purpose of Declarative API: скрывать boilerplate и контролировать согласованность, позволить нам
+}</style></head><body><div class="reveal"><div class="slides"><section><h2>Declarative programming and ADT in use in Django</h2><br/><hr/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5></section><section><h2>Purpose</h2><h3 class="fragment">To check as much as possible...</h3><h3 class="fragment">...and as soon as possible</h3></section><section>Purpose of Declarative API: скрывать boilerplate и контролировать согласованность, позволить нам
 сосредоточиться на главном
 http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></section><section>
 
@@ -132,10 +132,10 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></s
                   <span class="o">|</span> <span class="nc">Cancel</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">xid</span> <span class="o">=</span> <span class="n">oid</span><span class="o">)</span>
     <span class="o">;;</span>
 
-<span class="nc">Warning</span> <span class="nc">P</span><span class="o">:</span> <span class="nc">This</span> <span class="n">pattern</span><span class="o">-</span><span class="n">matching</span> <span class="n">is</span> <span class="n">not</span> <span class="n">exhaustive</span>
-<span class="nc">Here</span> <span class="n">is</span> <span class="n">an</span> <span class="n">example</span> <span class="k">of</span> <span class="n">a</span> <span class="k">value</span> <span class="n">that</span> <span class="n">is</span> <span class="n">not</span> <span class="n">matched</span><span class="o">...</span>
+<span class="c">(* Warning P: This pattern-matching is not exhaustive</span>
+<span class="c">Here is an example of a value that is not matched... *)</span>
 </pre></div>
-</section></section><section><h2>Trying to reproduce</h2></section><section><section><h2>Python ADT*</h2><br/><br/><span class="fragment">* kind of</span></section><section><h3>Python ADT example</h3>
+</section></section><section><h2>Trying to reproduce</h2><br/><ul><li class="fragment">automatic discovery of missed cases</li><li class="fragment">preventing redundant cases</li><li class="fragment">reporting impossible cases</li></ul></section><section><section><h2>Python ADT*</h2><br/><br/><span class="fragment">* kind of</span></section><section><h3>Python ADT example</h3>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 
@@ -234,16 +234,12 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></s
 <div class="source"><pre><span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Language</span>
 
 <span class="k">def</span> <span class="nf">includeme</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
-    <span class="n">RULES</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="n">Language</span>
-    <span class="p">}</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;articles.regional.index&#39;</span><span class="p">,</span>
-                     <span class="s">&#39;/articles/{language}&#39;</span><span class="p">,</span>
-                     <span class="n">rules</span><span class="o">=</span><span class="n">RULES</span><span class="p">)</span>
+    <span class="n">RULES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="n">Language</span><span class="p">}</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;articles.regional.index&#39;</span><span class="p">,</span> <span class="s">&#39;/articles/{language}&#39;</span><span class="p">,</span> <span class="n">RULES</span><span class="p">)</span>
 </pre></div>
 <span class="fragment">
 
-<div class="source"><pre>^articles/(?P&lt;language&gt;(?:de|en))$ [name=&#39;articles.regional.index&#39;]
+<div class="source"><pre>/articles/{language}   =&gt;   ^articles/(?P&lt;language&gt;(?:de|en))$
 </pre></div>
 </span></section><section><h3>Use case</h3><hr/><h4>Process requests</h4>
 

@@ -5,5 +5,5 @@ let filter_by_oid instructions oid =
                   | Cancel c -> c.xid = oid)
     ;;
 
-Warning P: This pattern-matching is not exhaustive
-Here is an example of a value that is not matched...
+(* Warning P: This pattern-matching is not exhaustive
+Here is an example of a value that is not matched... *)

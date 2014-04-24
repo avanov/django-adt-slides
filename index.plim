@@ -9,11 +9,8 @@ section
 
 section
     h2 Purpose
-    span.fragment
-        hr
-        h3 To check as much as possible...
-        span.fragment
-            h3 ...and as soon as possible
+    h3.fragment To check as much as possible...
+    h3.fragment ...and as soon as possible
 
 
 section
@@ -55,6 +52,12 @@ section
 
 section
     h2 Trying to reproduce
+    br: ul
+        li.fragment | automatic discovery of missed cases
+        li.fragment | preventing redundant cases
+        li.fragment | reporting impossible cases
+
+
 
 section
     section
