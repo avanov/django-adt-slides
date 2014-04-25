@@ -50,15 +50,20 @@ html lang="en"
 		<![endif]-->
 		style
             ${HtmlFormatter(style='manni').get_style_defs('.source')|n}
+            .source {
+                box-shadow: 0 0 6px rgba(0, 0, 0, 0.3);
+                }
             .source PRE {
                 padding:1em;
                 box-shadow:0;
-            }
-
+                }
+            .reveal PRE {
+                box-shadow:none;
+                }
             .reveal PRE CODE {
                 font-size: 0.80em;
                 line-height: 1.2em;
-            }
+                }
 
 	body
         .reveal: .slides = next.body()

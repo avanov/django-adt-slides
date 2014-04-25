@@ -23,31 +23,32 @@ section
 
 section
     == self.code_block('python', 'slide1.py')
+    .fragment
+        == self.code_block('python', 'constraints/logic.py')
 
 section
     h2 ADT
 
 section
-    section
-        h2 OCaml ADT example
-        span.fragment
-            hr
-               | Watch a "Caml Trading" talk by Yaron Minsky at `br`
-                 `a href="http://youtu.be/hKcOkWzj0_s?t=31m6s" http://youtu.be/hKcOkWzj0_s?t=31m6s`
+    h2 OCaml ADT example
+    .fragment
+        hr
+           | Watch a "Caml Trading" talk by Yaron Minsky at `br`
+             `a href="http://youtu.be/hKcOkWzj0_s?t=31m6s" http://youtu.be/hKcOkWzj0_s?t=31m6s`
 
-    section
-        h2 OCaml ADT example
-        == self.code_block('ocaml', 'filter_by_oid.ml')
+section
+    h2 OCaml ADT example
+    == self.code_block('ocaml', 'ocaml_adt/filter_by_oid.ml')
 
-    section
-        h3 OCaml ADT example
-        == self.code_block('ocaml', 'two_products.ml')
-        span.fragment == self.code_block('ocaml', 'third_product.ml')
+section
+    h3 OCaml ADT example
+    == self.code_block('ocaml', 'ocaml_adt/two_products.ml')
+    .fragment == self.code_block('ocaml', 'ocaml_adt/third_product.ml')
 
 
-    section
-        h2 OCaml ADT example
-        == self.code_block('ocaml', 'filter_by_oid_with_warning.ml')
+section
+    h2 OCaml ADT example
+    == self.code_block('ocaml', 'ocaml_adt/filter_by_oid_with_warning.ml')
 
 
 section
@@ -58,65 +59,62 @@ section
         li.fragment | reporting impossible cases
 
 
+section
+    h2 Python ADT*
+    br: br
+    .fragment | * kind of
 
 section
-    section
-        h2 Python ADT*
-        br: br
-        span.fragment | * kind of
-
-    section
-        h3 Python ADT example
-        == self.code_block('python', 'django_adt/models.py')
-
-
-    section
-        h3 Python ADT example
-        == self.code_block('python', 'django_adt/types.py')
-
-    section
-        h3 Python ADT example
-        == self.code_block('python', 'django_adt/logic.py')
-
-    section
-        h3 Python ADT example | Alternate
-        == self.code_block('python', 'django_adt/logic_alt.py')
+    h3 Python ADT example
+    == self.code_block('python', 'django_adt/models.py')
 
 
 section
-    section
-        h2 Use case
-        span.fragment
-            hr
-            h4 Multilingual content
+    h3 Python ADT example
+    == self.code_block('python', 'django_adt/types.py')
 
-    section
-        h3 Use case
-        hr: h4 Define ADT
-        == self.code_block('python', 'python_example/types.py')
+section
+    h3 Python ADT example
+    == self.code_block('python', 'django_adt/logic.py')
 
-    section
-        h3 Use case
-        hr: h4 Register Models
-        == self.code_block('python', 'python_example/models.py')
+section
+    h3 Python ADT example | Alternate
+    == self.code_block('python', 'django_adt/logic_alt.py')
 
-    section
-        h3 Use case
-        hr: h4 Guard boundaries
-        == self.code_block('python', 'python_example/__init__.py')
 
-        span.fragment
-            == self.code_block('text', 'python_example/rules_re.txt')
+section
+    h2 Use case
+    .fragment
+        hr
+        h4 Multilingual content
 
-    section
-        h3 Use case
-        hr: h4 Process requests
-        == self.code_block('python', 'python_example/views.py')
+section
+    h3 Use case
+    hr: h4 Define ADT
+    == self.code_block('python', 'python_example/types.py')
 
-    section
-        h3 Use case
-        hr: h4 Strategy map
-        == self.code_block('text', 'python_example/strategy_map.txt')
+section
+    h3 Use case
+    hr: h4 Register Models
+    == self.code_block('python', 'python_example/models.py')
+
+section
+    h3 Use case
+    hr: h4 Guard boundaries
+    == self.code_block('python', 'python_example/__init__.py')
+
+    .fragment
+        == self.code_block('text', 'python_example/rules_re.txt')
+
+section
+    h3 Use case
+    hr: h4 Process requests
+    == self.code_block('python', 'python_example/views.py')
+
+section
+    h3 Use case
+    hr: h4 Strategy map
+    == self.code_block('text', 'python_example/strategy_map.txt')
 
 section
     h2 Worth mentioning
@@ -133,7 +131,7 @@ section
 
 section
     h2 Thank you
-    span.fragment
+    .fragment
         hr: h4 Q & A
 
 section
