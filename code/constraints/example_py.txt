@@ -1,0 +1,10 @@
+def save_article(request):
+    if request.method == 'POST':
+        form = ArticleForm(request.POST)
+        if form.is_valid():
+            save_article(form.cleaned_data)
+            return HttpResponseRedirect('/success/')
+    else:
+        form = ArticleForm()
+
+    return render(request, 'article_form.html', {'form': form})

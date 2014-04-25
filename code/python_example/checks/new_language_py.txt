@@ -1,0 +1,4 @@
+class Language(adt):
+    ENGLISH = 'en'
+    GERMAN = 'de'
+    SPANISH = 'es'

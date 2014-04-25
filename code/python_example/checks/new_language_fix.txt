@@ -1,0 +1,4 @@
+# We have to register this case
+@Language.SPANISH('db:articles')
+class SpanishArticle(IRegionalArticle):
+    pass

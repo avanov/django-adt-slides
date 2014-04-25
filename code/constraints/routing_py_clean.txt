@@ -1,0 +1,14 @@
+class ArticlesHandler(object):
+    def __init__(self, request):
+        self.request = request
+
+    def article_form(self):
+        form = ArticleForm()
+        return {'form': form}
+
+    def save_article(self):
+        save_article(self.request.form.cleaned_data)
+        return HttpResponseRedirect('/success/')
+
+    def invalid_article_form(self):
+        return {'form': self.request.form}

@@ -1,0 +1,5 @@
+inline_matcher = Language.inline_match(
+    ENGLISH = lambda: EnglishArticle.objects.all(),
+    GERMAN = lambda: GermanArticle.objects.all(),
+    SPANISH = lambda: SpanishArticle.objects.all()
+)

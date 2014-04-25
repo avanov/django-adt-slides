@@ -64,6 +64,9 @@ html lang="en"
                 font-size: 0.80em;
                 line-height: 1.2em;
                 }
+            .pull-right {
+                text-align: right;
+                }
 
 	body
         .reveal: .slides = next.body()
@@ -75,7 +78,7 @@ html lang="en"
 			// Full list of configuration options available here:
 			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-				controls: true,
+				controls: false,
 				progress: true,
 				history: true,
 				center: true,

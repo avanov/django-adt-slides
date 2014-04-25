@@ -1,0 +1,6 @@
+if request.method == 'POST':
+    form = ArticleForm(request.POST)
+    if form.is_valid():
+         # ...
+else:
+    # ...

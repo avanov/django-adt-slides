@@ -86,54 +86,127 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 .reveal PRE CODE {
     font-size: 0.80em;
     line-height: 1.2em;
-    }</style></head><body><div class="reveal"><div class="slides"><section><h2>Declarative programming and ADT in use in Django</h2><br/><hr/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5></section><section><h2>Purpose</h2><h3 class="fragment">To check as much as possible...</h3><h3 class="fragment">...and as soon as possible</h3></section><section>Purpose of Declarative API: скрывать boilerplate и контролировать согласованность, позволить нам
-сосредоточиться на главном
-http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></section><section>
+    }
+.pull-right {
+    text-align: right;
+    }</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative Programming</h3><h3>and</h3><h3>Algebraic Data Types *</h3><br/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5><br/><br/><br/><div class="pull-right"><small>* Django explained</small></div><div class="pull-right"><small><a href="http://moscowdjango.ru/">19th Moscow Django Meetup</a></small></div></section><section><h2>Our Goal</h2><br/><ol><li class="fragment">&laquo;Outsource&raquo; boilerplate code (concentrate on important).</li><li class="fragment">Check as much as possible and as soon as possible.</li><li class="fragment">Coherence.</li></ol></section><section><h2>1. A story of How & What</h2></section><section><h2>How vs. What</h2>
 
-<div class="source"><pre><span class="k">def</span> <span class="nf">a_view</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="source"><pre><span class="k">def</span> <span class="nf">save_article</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">ExampleForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
-            <span class="n">process_data</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+            <span class="n">save_article</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/success/&#39;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">form</span> <span class="o">=</span> <span class="n">ExampleForm</span><span class="p">()</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;example.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
+    <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;article_form.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
 </pre></div>
-<div class="fragment">
+</section><section><h2>How</h2>
 
-<div class="source"><pre><span class="n">process_data</span><span class="p">(</span><span class="n">form</span><span class="p">)</span>
+<div class="source"><pre><span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
+    <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
+         <span class="c"># ...</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c"># ...</span>
+</pre></div>
+<h2>What</h2>
+
+<div class="source"><pre><span class="c"># case 1</span>
+<span class="n">save_article</span><span class="p">(</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span>
 <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/success/&#39;</span><span class="p">)</span>
+
+<span class="c"># case 2</span>
+<span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
+<span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;article_form.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
 </pre></div>
-</div></section><section><h2>ADT</h2></section><section><h2>OCaml ADT example</h2><div class="fragment"><hr/>Watch a "Caml Trading" talk by Yaron Minsky at <br/>
-<a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></div></section><section><h2>OCaml ADT example</h2>
+</section><section><h3>A few reasons to worry about</h3><br/><ul><li>&laquo;What&raquo; is obscured by &laquo;How&raquo;</li><li>Single Responsibility Principle is violated</li></ul></section><section><h4>If we could get rid of How's once and for all,</h4><h4>would we miss it?</h4></section><section><h2>Constraint programming</h2></section><section><h2>Tribute to <a href="http://www.pylonsproject.org/">Pyramid</a></h2>
+
+<div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric</span> <span class="kn">import</span> <span class="n">view_config</span><span class="p">,</span> <span class="n">view_defaults</span>
+
+<span class="nd">@view_defaults</span><span class="p">(</span><span class="n">route_name</span><span class="o">=</span><span class="s">&#39;articles&#39;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s">&#39;article_form.html&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">ArticlesHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;GET&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">validate_form</span><span class="o">=</span><span class="n">ArticleForm</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">save_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">save_article</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/success/&#39;</span><span class="p">)</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">invalid_article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">}</span>
+</pre></div>
+</section><section><h2>What it actually means</h2>
+
+<div class="source"><pre><span class="c"># We have an Articles Handler: ArticlesHandler</span>
+<span class="c"># It renders a template: article_form.html</span>
+<span class="c"># A user shall be able to add new entries: article_form()</span>
+<span class="c"># If we submit valid ArticleForm: save_article()</span>
+<span class="c"># If we submit invalid ArticleForm: invalid_article_form()</span>
+
+<span class="k">class</span> <span class="nc">ArticlesHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">save_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">save_article</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/success/&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">invalid_article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">}</span>
+</pre></div>
+</section><section><h2>...or in other words</h2><div class="fragment">
+
+<div class="source"><pre><span class="nn">---</span>
+<span class="l-Scalar-Plain">view</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ArticlesHandler</span>
+<span class="l-Scalar-Plain">GET</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">article_form</span>
+<span class="l-Scalar-Plain">POST</span><span class="p-Indicator">:</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">validate_form</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">articles.ArticleForm</span>
+      <span class="l-Scalar-Plain">valid</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">save_article</span>
+      <span class="l-Scalar-Plain">invalid</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">invalid_article_form</span>
+</pre></div>
+
+
+<div class="source"><pre><span class="k">class</span> <span class="nc">ArticlesHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+
+    <span class="k">def</span> <span class="nf">article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">}</span>
+
+    <span class="k">def</span> <span class="nf">save_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">save_article</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="o">.</span><span class="n">cleaned_data</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HttpResponseRedirect</span><span class="p">(</span><span class="s">&#39;/success/&#39;</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">invalid_article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">}</span>
+</pre></div>
+</div></section><section><h2>2. ADT</h2></section><section><h2>OCaml ADT example</h2><div class="fragment"><hr/>Watch a "Caml Trading" talk by Yaron Minsky at <br/>
+<a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></div></section><section><h2>OCaml ADT example</h2><div class="fragment">
 
 <div class="source"><pre><span class="k">type</span> <span class="n">order</span> <span class="o">=</span> <span class="o">{</span> <span class="n">id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
 <span class="k">type</span> <span class="n">cancel</span> <span class="o">=</span> <span class="o">{</span> <span class="n">xid</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
+</pre></div>
+</div><div class="fragment">
 
-<span class="k">type</span> <span class="n">instruction</span> <span class="o">=</span>
+<div class="source"><pre><span class="k">type</span> <span class="n">instruction</span> <span class="o">=</span>
    <span class="o">|</span> <span class="nc">Order</span> <span class="k">of</span> <span class="n">order</span>
    <span class="o">|</span> <span class="nc">Cancel</span> <span class="k">of</span> <span class="n">cancel</span>
-
-<span class="k">let</span> <span class="n">filter_by_oid</span> <span class="n">instructions</span> <span class="n">oid</span> <span class="o">=</span>
-    <span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="n">instructions</span>
-        <span class="o">(</span><span class="k">fun</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
-                  <span class="o">|</span> <span class="nc">Order</span> <span class="n">o</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">oid</span>
-                  <span class="o">|</span> <span class="nc">Cancel</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">xid</span> <span class="o">=</span> <span class="n">oid</span><span class="o">)</span>
-     <span class="o">;;</span>
 </pre></div>
-</section><section><h3>OCaml ADT example</h3>
-
-<div class="source"><pre><span class="c">(* Two product types *)</span>
-<span class="k">type</span> <span class="n">order</span> <span class="o">=</span> <span class="o">{</span> <span class="n">id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
-<span class="k">type</span> <span class="n">cancel</span> <span class="o">=</span> <span class="o">{</span> <span class="n">xid</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
-</pre></div>
-<div class="fragment">
-
-<div class="source"><pre><span class="k">type</span> <span class="n">cancel_replace</span> <span class="o">=</span> <span class="o">{</span> <span class="n">xr_id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">new_price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">new_size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
-</pre></div>
-</div></section><section><h2>OCaml ADT example</h2>
+</div><div class="fragment">
 
 <div class="source"><pre><span class="k">let</span> <span class="n">filter_by_oid</span> <span class="n">instructions</span> <span class="n">oid</span> <span class="o">=</span>
     <span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="n">instructions</span>
@@ -141,11 +214,38 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></s
                   <span class="o">|</span> <span class="nc">Order</span> <span class="n">o</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">oid</span>
                   <span class="o">|</span> <span class="nc">Cancel</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">xid</span> <span class="o">=</span> <span class="n">oid</span><span class="o">)</span>
     <span class="o">;;</span>
-
-<span class="c">(* Warning P: This pattern-matching is not exhaustive</span>
-<span class="c">Here is an example of a value that is not matched... *)</span>
 </pre></div>
-</section><section><h2>Trying to reproduce</h2><br/><ul><li class="fragment">automatic discovery of missed cases</li><li class="fragment">preventing redundant cases</li><li class="fragment">reporting impossible cases</li></ul></section><section><h2>Python ADT*</h2><br/><br/><div class="fragment">* kind of</div></section><section><h3>Python ADT example</h3>
+</div></section><section><h3>OCaml ADT example</h3>
+
+<div class="source"><pre><span class="k">type</span> <span class="n">order</span> <span class="o">=</span> <span class="o">{</span> <span class="n">id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
+<span class="k">type</span> <span class="n">cancel</span> <span class="o">=</span> <span class="o">{</span> <span class="n">xid</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
+</pre></div>
+<div class="fragment">
+
+<div class="source"><pre><span class="k">type</span> <span class="n">cancel_replace</span> <span class="o">=</span> <span class="o">{</span> <span class="n">xr_id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">new_price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">new_size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
+</pre></div>
+</div><div class="fragment">
+
+<div class="source"><pre><span class="k">type</span> <span class="n">instruction</span> <span class="o">=</span>
+   <span class="o">|</span> <span class="nc">Order</span> <span class="k">of</span> <span class="n">order</span>
+   <span class="o">|</span> <span class="nc">Cancel</span> <span class="k">of</span> <span class="n">cancel</span>
+   <span class="o">|</span> <span class="nc">Cancel_replace</span> <span class="k">of</span> <span class="n">cancel_replace</span>
+</pre></div>
+</div>
+
+<div class="source"><pre><span class="k">let</span> <span class="n">filter_by_oid</span> <span class="n">instructions</span> <span class="n">oid</span> <span class="o">=</span>
+    <span class="nn">List</span><span class="p">.</span><span class="n">filter</span> <span class="n">instructions</span>
+        <span class="o">(</span><span class="k">fun</span> <span class="n">x</span> <span class="o">-&gt;</span> <span class="k">match</span> <span class="n">x</span> <span class="k">with</span>
+                  <span class="o">|</span> <span class="nc">Order</span> <span class="n">o</span> <span class="o">-&gt;</span> <span class="n">o</span><span class="o">.</span><span class="n">id</span> <span class="o">=</span> <span class="n">oid</span>
+                  <span class="o">|</span> <span class="nc">Cancel</span> <span class="n">c</span> <span class="o">-&gt;</span> <span class="n">c</span><span class="o">.</span><span class="n">xid</span> <span class="o">=</span> <span class="n">oid</span><span class="o">)</span>
+    <span class="o">;;</span>
+</pre></div>
+<div class="fragment">
+
+<div class="source"><pre>Warning P: This pattern-matching is not exhaustive
+Here is an example of a value that is not matched...
+</pre></div>
+</div></section><section><h2>2. Trying to reproduce</h2><hr/><h4>Check as much as possible and as soon as possible</h4><br/><ul><li class="fragment">automatic discovery of missed cases</li><li class="fragment">preventing redundant cases</li><li class="fragment">reporting impossible cases</li></ul></section><section><h2>Python ADT <span data-fragment-index="0" class="fragment">*</span></h2><br/><br/><div data-fragment-index="0" class="fragment">* kind of</div></section><section><h3>Python ADT example</h3><hr/><h4>Model types</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 
@@ -165,7 +265,7 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></s
     <span class="n">new_price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
     <span class="n">new_size</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 </pre></div>
-</section><section><h3>Python ADT example</h3>
+</section><section><h3>Python ADT example</h3><hr/><h4>Types</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric.adt</span> <span class="kn">import</span> <span class="n">adt</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Order</span><span class="p">,</span> <span class="n">Cancel</span><span class="p">,</span> <span class="n">CancelReplace</span>
@@ -175,7 +275,7 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></s
     <span class="n">CANCEL</span> <span class="o">=</span> <span class="n">Cancel</span>
     <span class="n">CANCEL_REPLACE</span> <span class="o">=</span> <span class="n">CancelReplace</span>
 </pre></div>
-</section><section><h3>Python ADT example</h3>
+</section><section><h3>Python ADT example</h3><hr/><h4>Logic</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Instruction</span>
 
@@ -196,7 +296,7 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></s
         <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">Instruction</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="s">&#39;filter_by_oid&#39;</span><span class="p">](</span><span class="n">i</span><span class="p">,</span> <span class="n">oid</span><span class="p">),</span>
         <span class="n">instructions</span><span class="p">))</span>
 </pre></div>
-</section><section><h3>Python ADT example | Alternate</h3>
+</section><section><h3>Python ADT example</h3><hr/><h4>Logic (alternate)</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Instruction</span>
 
@@ -239,19 +339,7 @@ http://youtu.be/nRDC6GtfB4g</section><section><h2>Constraint programming</h2></s
 <span class="k">class</span> <span class="nc">GermanArticle</span><span class="p">(</span><span class="n">IRegionalArticle</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
-</section><section><h3>Use case</h3><hr/><h4>Guard boundaries</h4>
-
-<div class="source"><pre><span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Language</span>
-
-<span class="k">def</span> <span class="nf">includeme</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
-    <span class="n">RULES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="n">Language</span><span class="p">}</span>
-    <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;articles.regional.index&#39;</span><span class="p">,</span> <span class="s">&#39;/articles/{language}&#39;</span><span class="p">,</span> <span class="n">RULES</span><span class="p">)</span>
-</pre></div>
-<div class="fragment">
-
-<div class="source"><pre>/articles/{language}   =&gt;   ^articles/(?P&lt;language&gt;(?:de|en))$
-</pre></div>
-</div></section><section><h3>Use case</h3><hr/><h4>Process requests</h4>
+</section><section><h3>Use case</h3><hr/><h4>Process requests</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric.view</span> <span class="kn">import</span> <span class="n">view_config</span><span class="p">,</span> <span class="n">view_defaults</span>
 <span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Language</span>
@@ -278,13 +366,66 @@ GET /articles/de
 GET /articles/en
 {&#39;db:articles&#39;: &lt;class &#39;tests.testapp.testapp.articles.models.EnglishArticle&#39;&gt;}
 </pre></div>
-</section><section><h2>Worth mentioning</h2><hr/><ul><li><a href="https://github.com/lihaoyi/macropy">github.com/lihaoyi/macropy</a></li><li><a href="https://github.com/benanhalt/PyAlgebraicDataTypes">github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)</a></li></ul></section><section><h4>Use in tickets</h4>Bill implements -> @Language.ENGLISH('store:articles')John implements- > @Language.GERMAN('store:articles')</section><section><h2>Thank you</h2><div class="fragment"><hr/><h4>Q & A</h4></div></section><section><h2>Credits</h2><hr/><ul><li><a href="http://youtu.be/hKcOkWzj0_s">"Caml Trading"</a> talk by Yaron Minsky</li><li><a href="http://rhetoric.readthedocs.org/en/latest/">Rhetoric Project</a></li><li><a href="http://docs.pylonsproject.org/projects/venusian/en/latest/">Venusian Project</a></li></ul></section></div></div><script src="lib/js/head.min.js">
+</section><section><h3>Consistency check</h3><br/><h4>Adding a new language</h4>
+
+<div class="source"><pre><span class="k">class</span> <span class="nc">Language</span><span class="p">(</span><span class="n">adt</span><span class="p">):</span>
+    <span class="n">ENGLISH</span> <span class="o">=</span> <span class="s">&#39;en&#39;</span>
+    <span class="n">GERMAN</span> <span class="o">=</span> <span class="s">&#39;de&#39;</span>
+    <span class="n">SPANISH</span> <span class="o">=</span> <span class="s">&#39;es&#39;</span>
+</pre></div>
+<div class="fragment">
+
+<div class="source"><pre>ConfigurationError:
+  Case db:articles of &lt;class &#39;project.articles.types.Language&#39;&gt;
+  is not exhaustive. Here is the variant that is not matched: SPANISH
+</pre></div>
+</div><div class="fragment">
+
+<div class="source"><pre><span class="c"># We have to register this case</span>
+<span class="nd">@Language.SPANISH</span><span class="p">(</span><span class="s">&#39;db:articles&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">SpanishArticle</span><span class="p">(</span><span class="n">IRegionalArticle</span><span class="p">):</span>
+    <span class="k">pass</span>
+</pre></div>
+</div></section><section><h3>Consistency check</h3><br/><h4>Using undefined variant</h4>
+
+<div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric.adt</span> <span class="kn">import</span> <span class="n">adt</span>
+
+<span class="k">class</span> <span class="nc">Language</span><span class="p">(</span><span class="n">adt</span><span class="p">):</span>
+    <span class="n">ENGLISH</span> <span class="o">=</span> <span class="s">&#39;en&#39;</span>
+    <span class="n">GERMAN</span> <span class="o">=</span> <span class="s">&#39;de&#39;</span>
+</pre></div>
+
+
+<div class="source"><pre><span class="n">inline_matcher</span> <span class="o">=</span> <span class="n">Language</span><span class="o">.</span><span class="n">inline_match</span><span class="p">(</span>
+    <span class="n">ENGLISH</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">EnglishArticle</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+    <span class="n">GERMAN</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">GermanArticle</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">(),</span>
+    <span class="n">SPANISH</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">SpanishArticle</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+<div class="fragment">
+
+<div class="source"><pre>PatternError: Variant SPANISH does not belong
+              to the type &lt;class &#39;project.articles.types.Language&#39;&gt;
+</pre></div>
+</div></section><section><h3>Consistency check</h3><br/><h4>Guard boundaries</h4>
+
+<div class="source"><pre><span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Language</span>
+
+<span class="k">def</span> <span class="nf">includeme</span><span class="p">(</span><span class="n">config</span><span class="p">):</span>
+    <span class="n">RULES</span> <span class="o">=</span> <span class="p">{</span><span class="s">&#39;language&#39;</span><span class="p">:</span> <span class="n">Language</span><span class="p">}</span>
+    <span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;articles.regional.index&#39;</span><span class="p">,</span> <span class="s">&#39;/articles/{language}&#39;</span><span class="p">,</span> <span class="n">RULES</span><span class="p">)</span>
+</pre></div>
+<div class="fragment">
+
+<div class="source"><pre>/articles/{language}   =&gt;   ^articles/(?P&lt;language&gt;(?:de|en))$
+</pre></div>
+</div></section><section><h2>Worth mentioning</h2><hr/><ul><li><a href="https://github.com/lihaoyi/macropy">github.com/lihaoyi/macropy</a></li><li><a href="https://github.com/benanhalt/PyAlgebraicDataTypes">github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)</a></li><li><a href="http://youtu.be/nRDC6GtfB4g">&laquo;Say What You Mean&raquo; talk by Ryan Kelly</a></li></ul></section><section><h2>Thank you</h2><br/><div class="fragment"><hr/><br/><h4>Q & A</h4></div></section><section><h2>Credits</h2><br/><ul><li><a href="http://youtu.be/hKcOkWzj0_s">&laquo;Caml Trading&raquo;</a> talk by Yaron Minsky</li><li><a href="http://rhetoric.readthedocs.org/en/latest/">Rhetoric Project</a></li><li><a href="http://docs.pylonsproject.org/projects/venusian/en/latest/">Venusian Project</a></li></ul></section></div></div><script src="lib/js/head.min.js">
 </script><script src="js/reveal.min.js">
 </script><script>
 // Full list of configuration options available here:
 // https://github.com/hakimel/reveal.js#configuration
 Reveal.initialize({
-	controls: true,
+	controls: false,
 	progress: true,
 	history: true,
 	center: true,

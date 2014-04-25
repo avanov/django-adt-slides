@@ -1,0 +1,21 @@
+from rhetoric import view_config, view_defaults
+
+@view_defaults(route_name='articles', renderer='article_form.html')
+class ArticlesHandler(object):
+    def __init__(self, request):
+        self.request = request
+
+    @view_config(request_method='GET')
+    def article_form(self):
+        form = ArticleForm()
+        return {'form': form}
+
+    @view_config(request_method='POST', validate_form=ArticleForm)
+    def save_article(self):
+        save_article(self.request.form.cleaned_data)
+        return HttpResponseRedirect('/success/')
+
+    @view_config(request_method='POST')
+    def invalid_article_form(self):
+        return {'form': self.request.form}
+
