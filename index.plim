@@ -36,7 +36,7 @@ section
     == self.code_block('python', 'constraints/what.txt')
 
 section
-    h3 A few reasons to worry about
+    h3 A few things to worry about
     == self.code_block('python', 'constraints/example_py.txt')
     br: ul
         li.fragment &laquo;What&raquo; is obscured by &laquo;How&raquo;
