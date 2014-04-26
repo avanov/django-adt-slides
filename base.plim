@@ -19,7 +19,7 @@ html lang="en"
 	head
 		meta charset="utf-8"
 
-		title Declarative Programming and Algebraic Data Types, from Django's perspective
+		title Declarative Programming and Algebraic Data Types from Django's perspective, by Maxim Avanov
 
 		meta name="description" content="A framework for easily creating beautiful presentations using HTML"
 		meta name="author" content="Hakim El Hattab"
