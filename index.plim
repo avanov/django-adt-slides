@@ -3,9 +3,9 @@
 
 section
     h3 Declarative Programming
-    h3 and
+    h4 &
     h3 Algebraic Data Types *
-    br: br
+    br: br: br
     h5 Maxim Avanov
     h5: a href="https://maximavanov.com/" maximavanov.com
     br: br: br
