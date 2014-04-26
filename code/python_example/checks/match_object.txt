@@ -1,0 +1,5 @@
+class ArticlesHandler(object):
+    def __init__(self, request, language):
+        self.request = request
+        self.language = language
+        self.language_strategy = Language.match(language)

@@ -89,7 +89,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
     }
 .pull-right {
     text-align: right;
-    }</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative Programming</h3><h3>and</h3><h3>Algebraic Data Types *</h3><br/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5><br/><br/><br/><div class="pull-right"><small>* Django explained</small></div><div class="pull-right"><small><a href="http://moscowdjango.ru/">19th Moscow Django Meetup</a></small></div></section><section><h2>Our Goal</h2><br/><ol><li class="fragment">&laquo;Outsource&raquo; boilerplate code (concentrate on important).</li><li class="fragment">Check as much as possible and as soon as possible.</li><li class="fragment">Coherence.</li></ol></section><section><h2>1. A story of How & What</h2></section><section><h2>How vs. What</h2>
+    }</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative Programming</h3><h3>and</h3><h3>Algebraic Data Types *</h3><br/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5><br/><br/><br/><div class="pull-right"><small>* Django explained</small></div><div class="pull-right"><small><a href="http://moscowdjango.ru/">19th Moscow Django Meetup</a></small></div></section><section><h2>Our Goal</h2><br/><ol><li class="fragment">&laquo;Outsource&raquo; boilerplate code (concentrate on important).</li><li class="fragment">Check as much as possible and as soon as possible.</li><li class="fragment">Component coherence.</li></ol></section><section><h2>1. A story of How & What</h2><hr/><h4>Concentrate on important</h4></section><section><h2>How vs. What</h2>
 
 <div class="source"><pre><span class="k">def</span> <span class="nf">save_article</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
@@ -121,7 +121,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">()</span>
 <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;article_form.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
 </pre></div>
-</section><section><h3>A few reasons to worry about</h3><br/><ul><li>&laquo;What&raquo; is obscured by &laquo;How&raquo;</li><li>Single Responsibility Principle is violated</li></ul></section><section><h4>If we could get rid of How's once and for all,</h4><h4>would we miss it?</h4></section><section><h2>Constraint programming</h2></section><section><h2>Tribute to <a href="http://www.pylonsproject.org/">Pyramid</a></h2>
+</section><section><h3>A few reasons to worry about</h3><br/><ul><li>&laquo;What&raquo; is obscured by &laquo;How&raquo;</li><li>Single Responsibility Principle is violated</li></ul></section><section><h4>If we could get rid of How's once and for all,</h4><h4>would we miss them?</h4></section><section><h2>Constraint programming</h2></section><section><h2>Tribute to <a href="http://www.pylonsproject.org/">Pyramid</a></h2>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric</span> <span class="kn">import</span> <span class="n">view_config</span><span class="p">,</span> <span class="n">view_defaults</span>
 
@@ -194,7 +194,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
     <span class="k">def</span> <span class="nf">invalid_article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">}</span>
 </pre></div>
-</div></section><section><h2>2. ADT</h2></section><section><h2>OCaml ADT example</h2><div class="fragment"><hr/>Watch a "Caml Trading" talk by Yaron Minsky at <br/>
+</div></section><section><h2>Algebraic Data Types</h2></section><section><h2>OCaml ADT example</h2><div class="fragment"><hr/>Watch a &laquo;Caml Trading&raquo; talk by Yaron Minsky at <br/>
 <a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></div></section><section><h2>OCaml ADT example</h2><div class="fragment">
 
 <div class="source"><pre><span class="k">type</span> <span class="n">order</span> <span class="o">=</span> <span class="o">{</span> <span class="n">id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
@@ -245,7 +245,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 <div class="source"><pre>Warning P: This pattern-matching is not exhaustive
 Here is an example of a value that is not matched...
 </pre></div>
-</div></section><section><h2>2. Trying to reproduce</h2><hr/><h4>Check as much as possible and as soon as possible</h4><br/><ul><li class="fragment">automatic discovery of missed cases</li><li class="fragment">preventing redundant cases</li><li class="fragment">reporting impossible cases</li></ul></section><section><h2>Python ADT <span data-fragment-index="0" class="fragment">*</span></h2><br/><br/><div data-fragment-index="0" class="fragment">* kind of</div></section><section><h3>Python ADT example</h3><hr/><h4>Model types</h4>
+</div></section><section><h2>2. Trying to reproduce</h2><hr/><h4>Check as much as possible and as soon as possible</h4><br/><ul><li class="fragment">automatic discovery of missed cases</li><li class="fragment">preventing redundant cases</li><li class="fragment">reporting impossible cases</li></ul></section><section><h2>Python ADT <span data-fragment-index="0" class="fragment">*</span></h2><br/><br/><div data-fragment-index="0" class="fragment"><small>* kind of</small></div></section><section><h3>Python ADT example</h3><br/><h4>Model types</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 
@@ -265,7 +265,7 @@ Here is an example of a value that is not matched...
     <span class="n">new_price</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">DecimalField</span><span class="p">(</span><span class="n">max_digits</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span> <span class="n">decimal_places</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
     <span class="n">new_size</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">IntegerField</span><span class="p">()</span>
 </pre></div>
-</section><section><h3>Python ADT example</h3><hr/><h4>Types</h4>
+</section><section><h3>Python ADT example</h3><br/><h4>Types</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric.adt</span> <span class="kn">import</span> <span class="n">adt</span>
 <span class="kn">from</span> <span class="nn">.models</span> <span class="kn">import</span> <span class="n">Order</span><span class="p">,</span> <span class="n">Cancel</span><span class="p">,</span> <span class="n">CancelReplace</span>
@@ -275,7 +275,7 @@ Here is an example of a value that is not matched...
     <span class="n">CANCEL</span> <span class="o">=</span> <span class="n">Cancel</span>
     <span class="n">CANCEL_REPLACE</span> <span class="o">=</span> <span class="n">CancelReplace</span>
 </pre></div>
-</section><section><h3>Python ADT example</h3><hr/><h4>Logic</h4>
+</section><section><h3>Python ADT example</h3><br/><h4>Logic</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Instruction</span>
 
@@ -296,7 +296,7 @@ Here is an example of a value that is not matched...
         <span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">Instruction</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">i</span><span class="p">)[</span><span class="s">&#39;filter_by_oid&#39;</span><span class="p">](</span><span class="n">i</span><span class="p">,</span> <span class="n">oid</span><span class="p">),</span>
         <span class="n">instructions</span><span class="p">))</span>
 </pre></div>
-</section><section><h3>Python ADT example</h3><hr/><h4>Logic (alternate)</h4>
+</section><section><h3>Python ADT example</h3><br/><h4>Logic (alternate)</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Instruction</span>
 
@@ -309,7 +309,7 @@ Here is an example of a value that is not matched...
     <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">i</span><span class="p">:</span> <span class="n">inline_matcher</span><span class="p">(</span><span class="n">i</span><span class="p">)(</span><span class="n">i</span><span class="p">,</span> <span class="n">oid</span><span class="p">),</span>
                        <span class="n">instructions</span><span class="p">))</span>
 </pre></div>
-</section><section><h2>Use case</h2><div class="fragment"><hr/><h4>Multilingual content</h4></div></section><section><h3>Use case</h3><hr/><h4>Define ADT</h4>
+</section><section><h3>3. Use case: multilingual content</h3><hr/><h4>Component coherence</h4></section><section><h3>Use case</h3><br/><h4>Define ADT</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric.adt</span> <span class="kn">import</span> <span class="n">adt</span>
 
@@ -317,7 +317,7 @@ Here is an example of a value that is not matched...
     <span class="n">ENGLISH</span> <span class="o">=</span> <span class="s">&#39;en&#39;</span>
     <span class="n">GERMAN</span> <span class="o">=</span> <span class="s">&#39;de&#39;</span>
 </pre></div>
-</section><section><h3>Use case</h3><hr/><h4>Register Models</h4>
+</section><section><h3>Use case</h3><br/><h4>Register Models</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Language</span>
@@ -339,7 +339,7 @@ Here is an example of a value that is not matched...
 <span class="k">class</span> <span class="nc">GermanArticle</span><span class="p">(</span><span class="n">IRegionalArticle</span><span class="p">):</span>
     <span class="k">pass</span>
 </pre></div>
-</section><section><h3>Use case</h3><hr/><h4>Process requests</h4>
+</section><section><h3>Use case</h3><br/><h4>Process requests</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric.view</span> <span class="kn">import</span> <span class="n">view_config</span><span class="p">,</span> <span class="n">view_defaults</span>
 <span class="kn">from</span> <span class="nn">.types</span> <span class="kn">import</span> <span class="n">Language</span>
@@ -355,16 +355,6 @@ Here is an example of a value that is not matched...
     <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;GET&#39;</span><span class="p">)</span>
     <span class="k">def</span> <span class="nf">show_local_entries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="s">&#39;ok&#39;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
-</pre></div>
-</section><section><h3>Use case</h3><hr/><h4>Strategy map</h4>
-
-<div class="source"><pre># self.language_strategy = Language.match(language)
-
-GET /articles/de
-{&#39;db:articles&#39;: &lt;class &#39;tests.testapp.testapp.articles.models.GermanArticle&#39;&gt;}
-
-GET /articles/en
-{&#39;db:articles&#39;: &lt;class &#39;tests.testapp.testapp.articles.models.EnglishArticle&#39;&gt;}
 </pre></div>
 </section><section><h3>Consistency check</h3><br/><h4>Adding a new language</h4>
 
@@ -419,7 +409,34 @@ GET /articles/en
 
 <div class="source"><pre>/articles/{language}   =&gt;   ^articles/(?P&lt;language&gt;(?:de|en))$
 </pre></div>
-</div></section><section><h2>Worth mentioning</h2><hr/><ul><li><a href="https://github.com/lihaoyi/macropy">github.com/lihaoyi/macropy</a></li><li><a href="https://github.com/benanhalt/PyAlgebraicDataTypes">github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)</a></li><li><a href="http://youtu.be/nRDC6GtfB4g">&laquo;Say What You Mean&raquo; talk by Ryan Kelly</a></li></ul></section><section><h2>Thank you</h2><br/><div class="fragment"><hr/><br/><h4>Q & A</h4></div></section><section><h2>Credits</h2><br/><ul><li><a href="http://youtu.be/hKcOkWzj0_s">&laquo;Caml Trading&raquo;</a> talk by Yaron Minsky</li><li><a href="http://rhetoric.readthedocs.org/en/latest/">Rhetoric Project</a></li><li><a href="http://docs.pylonsproject.org/projects/venusian/en/latest/">Venusian Project</a></li></ul></section></div></div><script src="lib/js/head.min.js">
+</div><div class="fragment">
+
+<div class="source"><pre><span class="k">class</span> <span class="nc">Language</span><span class="p">(</span><span class="n">adt</span><span class="p">):</span>
+    <span class="n">ENGLISH</span> <span class="o">=</span> <span class="s">&#39;en&#39;</span>
+    <span class="n">GERMAN</span> <span class="o">=</span> <span class="s">&#39;de&#39;</span>
+    <span class="n">SPANISH</span> <span class="o">=</span> <span class="s">&#39;es&#39;</span>
+</pre></div>
+</div><div class="fragment">
+
+<div class="source"><pre>/articles/{language}   =&gt;   ^articles/(?P&lt;language&gt;(?:de|en|es))$
+</pre></div>
+</div></section><section><h3>Use case</h3><br/><h4>Strategy map</h4>
+
+<div class="source"><pre><span class="k">class</span> <span class="nc">ArticlesHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request</span><span class="p">,</span> <span class="n">language</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">request</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language</span> <span class="o">=</span> <span class="n">language</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">language_strategy</span> <span class="o">=</span> <span class="n">Language</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">language</span><span class="p">)</span>
+</pre></div>
+<div class="fragment">
+
+<div class="source"><pre>GET /articles/de
+{&#39;db:articles&#39;: &lt;class &#39;project.articles.models.GermanArticle&#39;&gt;}
+
+GET /articles/en
+{&#39;db:articles&#39;: &lt;class &#39;project.articles.models.EnglishArticle&#39;&gt;}
+</pre></div>
+</div></section><section><h2>Beyond today's topic</h2><hr/><h4>Things worth mentioning</h4><br/><ul><li><a href="https://github.com/lihaoyi/macropy">github.com/lihaoyi/macropy</a></li><li><a href="https://github.com/benanhalt/PyAlgebraicDataTypes">github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)</a></li><li><a href="http://youtu.be/nRDC6GtfB4g">&laquo;Say What You Mean&raquo; talk by Ryan Kelly</a></li></ul></section><section><h2>Thank you</h2><br/><div class="fragment"><hr/><br/><h4>Q & A</h4></div></section><section><h2>Credits</h2><br/><ul><li><a href="http://youtu.be/hKcOkWzj0_s">&laquo;Caml Trading&raquo;</a> talk by Yaron Minsky</li><li><a href="http://rhetoric.readthedocs.org/en/latest/">Rhetoric Project</a></li><li><a href="http://docs.pylonsproject.org/projects/venusian/en/latest/">Venusian Project</a></li></ul></section></div></div><script src="lib/js/head.min.js">
 </script><script src="js/reveal.min.js">
 </script><script>
 // Full list of configuration options available here:
