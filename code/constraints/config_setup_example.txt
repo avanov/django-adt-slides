@@ -1,0 +1,1 @@
+config.add_route('api.workflows', '/api/workflows')

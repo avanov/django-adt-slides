@@ -9,7 +9,7 @@ section
     h5 Maxim Avanov
     h5: a href="https://maximavanov.com/" maximavanov.com
     br: br: br
-    .pull-right: small * Django explained
+    .pull-right: small * from Django's perspective
     .pull-right: small `a href="http://moscowdjango.ru/" 19th Moscow Django Meetup`
 
 
@@ -65,6 +65,19 @@ section
         == self.code_block('python', 'constraints/routing_py_clean.txt')
 
 section
+    h3 A couple of other examples
+
+section
+    h3 Different ways to do the same thing
+    == self.code_block('python', 'constraints/multiple_forms.txt')
+
+section
+    h3 API versioning
+    == self.code_block('python', 'constraints/config_setup_example.txt')
+    == self.code_block('python', 'constraints/api_version.txt')
+    == self.code_block('python', 'constraints/api_version_alt.txt')
+
+section
     h2 Algebraic Data Types
 
 
@@ -93,7 +106,7 @@ section
 section
     h2 2. Trying to reproduce
     hr
-    h4 Check as much as possible and as soon as possible
+    h4 Check as much as possible, and as soon as possible
     br: ul
         li.fragment | automatic discovery of missed cases
         li.fragment | preventing redundant cases

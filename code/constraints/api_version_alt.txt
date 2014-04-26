@@ -1,0 +1,10 @@
+@view_defaults(route_name='api.workflows', renderer='json')
+class WorkflowsAPI(object):
+
+    @view_config(request_method='POST', api_version='<2.0')
+    def create_new_workflow_v1(self):
+        # ...
+
+    @view_config(request_method='POST', api_version='>=2.0')
+    def create_new_workflow_v2(self):
+        # ...

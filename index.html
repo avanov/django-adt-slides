@@ -92,7 +92,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
     }
 .pull-left {
     text-align: left;
-    }</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative Programming</h3><h4>&</h4><h3>Algebraic Data Types *</h3><br/><br/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5><br/><br/><br/><div class="pull-right"><small>* Django explained</small></div><div class="pull-right"><small><a href="http://moscowdjango.ru/">19th Moscow Django Meetup</a></small></div></section><section><h2>Our Goal</h2><br/><h4 class="fragment pull-left">1. &laquo;Outsource&raquo; boilerplate (i.e. concentrate on important).</h4><h4 class="fragment pull-left">2. Check as much as possible, and as soon as possible.</h4><h4 class="fragment pull-left">3. Component coherence.</h4></section><section><h2>1. A story of How & What</h2><hr/><h4>Concentrate on important</h4></section><section><h2>How vs. What</h2>
+    }</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative Programming</h3><h4>&</h4><h3>Algebraic Data Types *</h3><br/><br/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5><br/><br/><br/><div class="pull-right"><small>* from Django's perspective</small></div><div class="pull-right"><small><a href="http://moscowdjango.ru/">19th Moscow Django Meetup</a></small></div></section><section><h2>Our Goal</h2><br/><h4 class="fragment pull-left">1. &laquo;Outsource&raquo; boilerplate (i.e. concentrate on important).</h4><h4 class="fragment pull-left">2. Check as much as possible, and as soon as possible.</h4><h4 class="fragment pull-left">3. Component coherence.</h4></section><section><h2>1. A story of How & What</h2><hr/><h4>Concentrate on important</h4></section><section><h2>How vs. What</h2>
 
 <div class="source"><pre><span class="k">def</span> <span class="nf">handle_article_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
@@ -189,9 +189,9 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 <span class="l-Scalar-Plain">view</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">ArticlesHandler</span>
 <span class="l-Scalar-Plain">GET</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">article_form</span>
 <span class="l-Scalar-Plain">POST</span><span class="p-Indicator">:</span>
-    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">validate_form</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">articles.ArticleForm</span>
-      <span class="l-Scalar-Plain">valid</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">save_article</span>
-      <span class="l-Scalar-Plain">invalid</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">invalid_article_form</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">validate</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">articles.ArticleForm</span>
+      <span class="l-Scalar-Plain">view</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">save_article</span>
+    <span class="p-Indicator">-</span> <span class="l-Scalar-Plain">view</span><span class="p-Indicator">:</span> <span class="l-Scalar-Plain">invalid_article_form</span>
 </pre></div>
 
 
@@ -210,7 +210,55 @@ if( window.location.search.match( /print-pdf/gi ) ) {
     <span class="k">def</span> <span class="nf">invalid_article_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">form</span><span class="p">}</span>
 </pre></div>
-</div></section><section><h2>Algebraic Data Types</h2></section><section><h2>OCaml ADT example</h2><div class="fragment"><hr/>Watch a &laquo;Caml Trading&raquo; talk by Yaron Minsky at <br/>
+</div></section><section><h3>A couple of other examples</h3></section><section><h3>Different ways to do the same thing</h3>
+
+<div class="source"><pre><span class="nd">@view_defaults</span><span class="p">(</span><span class="n">route_name</span><span class="o">=</span><span class="s">&#39;authentication&#39;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s">&#39;auth_form.html&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">AuthenticationHandler</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">validate_form</span><span class="o">=</span><span class="n">EmailAuthForm</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">auth_with_email</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># ...</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">validate_form</span><span class="o">=</span><span class="n">SMSAuthForm</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">auth_with_sms</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># ...</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">validate_form</span><span class="o">=</span><span class="n">LoginAuthForm</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">auth_with_login</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># ...</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">on_invalid_form</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># ...</span>
+</pre></div>
+</section><section><h3>API versioning</h3>
+
+<div class="source"><pre><span class="n">config</span><span class="o">.</span><span class="n">add_route</span><span class="p">(</span><span class="s">&#39;api.workflows&#39;</span><span class="p">,</span> <span class="s">&#39;/api/workflows&#39;</span><span class="p">)</span>
+</pre></div>
+
+
+<div class="source"><pre><span class="nd">@view_defaults</span><span class="p">(</span><span class="n">route_name</span><span class="o">=</span><span class="s">&#39;api.workflows&#39;</span><span class="p">,</span> <span class="n">api_version</span><span class="o">=</span><span class="s">&#39;&lt;2.0&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">WorkflowsAPIv1</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c"># ...</span>
+
+<span class="nd">@view_defaults</span><span class="p">(</span><span class="n">route_name</span><span class="o">=</span><span class="s">&#39;api.workflows&#39;</span><span class="p">,</span> <span class="n">api_version</span><span class="o">=</span><span class="s">&#39;&gt;=2.0&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">WorkflowsAPIv2</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="c"># ...</span>
+</pre></div>
+
+
+<div class="source"><pre><span class="nd">@view_defaults</span><span class="p">(</span><span class="n">route_name</span><span class="o">=</span><span class="s">&#39;api.workflows&#39;</span><span class="p">,</span> <span class="n">renderer</span><span class="o">=</span><span class="s">&#39;json&#39;</span><span class="p">)</span>
+<span class="k">class</span> <span class="nc">WorkflowsAPI</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">api_version</span><span class="o">=</span><span class="s">&#39;&lt;2.0&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create_new_workflow_v1</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># ...</span>
+
+    <span class="nd">@view_config</span><span class="p">(</span><span class="n">request_method</span><span class="o">=</span><span class="s">&#39;POST&#39;</span><span class="p">,</span> <span class="n">api_version</span><span class="o">=</span><span class="s">&#39;&gt;=2.0&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="nf">create_new_workflow_v2</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># ...</span>
+</pre></div>
+</section><section><h2>Algebraic Data Types</h2></section><section><h2>OCaml ADT example</h2><div class="fragment"><hr/>Watch a &laquo;Caml Trading&raquo; talk by Yaron Minsky at <br/>
 <a href="http://youtu.be/hKcOkWzj0_s?t=31m6s">http://youtu.be/hKcOkWzj0_s?t=31m6s</a></div></section><section><h2>OCaml ADT example</h2><div class="fragment">
 
 <div class="source"><pre><span class="k">type</span> <span class="n">order</span> <span class="o">=</span> <span class="o">{</span> <span class="n">id</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="n">price</span><span class="o">:</span> <span class="kt">float</span><span class="o">;</span> <span class="n">size</span><span class="o">:</span> <span class="kt">int</span><span class="o">;</span> <span class="o">}</span>
@@ -261,7 +309,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 <div class="source"><pre>Warning P: This pattern-matching is not exhaustive
 Here is an example of a value that is not matched...
 </pre></div>
-</div></section><section><h2>2. Trying to reproduce</h2><hr/><h4>Check as much as possible and as soon as possible</h4><br/><ul><li class="fragment">automatic discovery of missed cases</li><li class="fragment">preventing redundant cases</li><li class="fragment">reporting impossible cases</li></ul></section><section><h2>Python ADT <span data-fragment-index="0" class="fragment">*</span></h2><br/><br/><div data-fragment-index="0" class="fragment"><small>* kind of</small></div></section><section><h3>Python ADT example</h3><br/><h4>Model types</h4>
+</div></section><section><h2>2. Trying to reproduce</h2><hr/><h4>Check as much as possible, and as soon as possible</h4><br/><ul><li class="fragment">automatic discovery of missed cases</li><li class="fragment">preventing redundant cases</li><li class="fragment">reporting impossible cases</li></ul></section><section><h2>Python ADT <span data-fragment-index="0" class="fragment">*</span></h2><br/><br/><div data-fragment-index="0" class="fragment"><small>* kind of</small></div></section><section><h3>Python ADT example</h3><br/><h4>Model types</h4>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 

@@ -2,6 +2,6 @@
 view: ArticlesHandler
 GET: article_form
 POST:
-    - validate_form: articles.ArticleForm
-      valid: save_article
-      invalid: invalid_article_form
+    - validate: articles.ArticleForm
+      view: save_article
+    - view: invalid_article_form
