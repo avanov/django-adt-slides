@@ -15,10 +15,10 @@ section
 
 section
     h2 Our Goal
-    br: ol
-        li.fragment &laquo;Outsource&raquo; boilerplate code (concentrate on important).
-        li.fragment Check as much as possible and as soon as possible.
-        li.fragment Component coherence.
+    br
+    h4.fragment.pull-left 1. &laquo;Outsource&raquo; boilerplate (i.e. concentrate on important).
+    h4.fragment.pull-left 2. Check as much as possible, and as soon as possible.
+    h4.fragment.pull-left 3. Component coherence.
 
 section
 
@@ -36,11 +36,12 @@ section
     == self.code_block('python', 'constraints/what.txt')
 
 section
-
     h3 A few reasons to worry about
+    == self.code_block('python', 'constraints/example_py.txt')
     br: ul
-        li &laquo;What&raquo; is obscured by &laquo;How&raquo;
-        li Single Responsibility Principle is violated
+        li.fragment &laquo;What&raquo; is obscured by &laquo;How&raquo;
+        li.fragment Single Responsibility Principle is violated
+        li.fragment Redundant details
 
 section
     h4 If we could get rid of How's once and for all,

@@ -67,6 +67,9 @@ html lang="en"
             .pull-right {
                 text-align: right;
                 }
+            .pull-left {
+                text-align: left;
+                }
 
 	body
         .reveal: .slides = next.body()
