@@ -109,8 +109,8 @@ section
     h4 Check as much as possible, and as soon as possible
     br: ul
         li.fragment | automatic discovery of missed cases
-        li.fragment | preventing redundant cases
         li.fragment | reporting impossible cases
+        li.fragment | preventing redundant cases
 
 
 section
@@ -121,26 +121,26 @@ section
 section
     h3 Python ADT example
     br
-    h4 Model types
+    h4 Models (product types)
     == self.code_block('python', 'django_adt/models.py')
 
 
 section
     h3 Python ADT example
     br
-    h4 Types
+    h4 Smart Enums (union types)
     == self.code_block('python', 'django_adt/types.py')
 
 section
     h3 Python ADT example
     br
-    h4 Logic
+    h4 Cases (match statement)
     == self.code_block('python', 'django_adt/logic.py')
 
 section
     h3 Python ADT example
     br
-    h4 Logic (alternate)
+    h4 Cases (2)
     == self.code_block('python', 'django_adt/logic_alt.py')
 
 
