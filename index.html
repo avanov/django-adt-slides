@@ -94,7 +94,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
     text-align: left;
     }</style></head><body><div class="reveal"><div class="slides"><section><h3>Declarative Programming</h3><h4>&</h4><h3>Algebraic Data Types *</h3><br/><br/><br/><h5>Maxim Avanov</h5><h5><a href="https://maximavanov.com/">maximavanov.com</a></h5><br/><br/><br/><div class="pull-right"><small>* Django explained</small></div><div class="pull-right"><small><a href="http://moscowdjango.ru/">19th Moscow Django Meetup</a></small></div></section><section><h2>Our Goal</h2><br/><h4 class="fragment pull-left">1. &laquo;Outsource&raquo; boilerplate (i.e. concentrate on important).</h4><h4 class="fragment pull-left">2. Check as much as possible, and as soon as possible.</h4><h4 class="fragment pull-left">3. Component coherence.</h4></section><section><h2>1. A story of How & What</h2><hr/><h4>Concentrate on important</h4></section><section><h2>How vs. What</h2>
 
-<div class="source"><pre><span class="k">def</span> <span class="nf">save_article</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="source"><pre><span class="k">def</span> <span class="nf">handle_article_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
@@ -126,7 +126,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 </pre></div>
 </section><section><h3>A few things to worry about</h3>
 
-<div class="source"><pre><span class="k">def</span> <span class="nf">save_article</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
+<div class="source"><pre><span class="k">def</span> <span class="nf">handle_article_form</span><span class="p">(</span><span class="n">request</span><span class="p">):</span>
     <span class="k">if</span> <span class="n">request</span><span class="o">.</span><span class="n">method</span> <span class="o">==</span> <span class="s">&#39;POST&#39;</span><span class="p">:</span>
         <span class="n">form</span> <span class="o">=</span> <span class="n">ArticleForm</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">POST</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">form</span><span class="o">.</span><span class="n">is_valid</span><span class="p">():</span>
@@ -137,7 +137,7 @@ if( window.location.search.match( /print-pdf/gi ) ) {
 
     <span class="k">return</span> <span class="n">render</span><span class="p">(</span><span class="n">request</span><span class="p">,</span> <span class="s">&#39;article_form.html&#39;</span><span class="p">,</span> <span class="p">{</span><span class="s">&#39;form&#39;</span><span class="p">:</span> <span class="n">form</span><span class="p">})</span>
 </pre></div>
-<br/><ul><li class="fragment">&laquo;What&raquo; is obscured by &laquo;How&raquo;</li><li class="fragment">Single Responsibility Principle is violated</li><li class="fragment">Redundant details</li></ul></section><section><h4>If we could get rid of How's once and for all,</h4><h4>would we miss them?</h4></section><section><h2>Constraint programming</h2></section><section><h2>Tribute to <a href="http://www.pylonsproject.org/">Pyramid</a></h2>
+<br/><ul><li class="fragment">&laquo;What&raquo; is obscured by &laquo;How&raquo;</li><li class="fragment">Redundant details</li><li class="fragment">Single Responsibility Principle is violated</li></ul></section><section><h4>If we could get rid of How's once and for all,</h4><h4>would we miss them?</h4></section><section><h2>Constraint programming</h2></section><section><h2>Tribute to <a href="http://www.pylonsproject.org/">Pyramid</a></h2>
 
 <div class="source"><pre><span class="kn">from</span> <span class="nn">rhetoric</span> <span class="kn">import</span> <span class="n">view_config</span><span class="p">,</span> <span class="n">view_defaults</span>
 

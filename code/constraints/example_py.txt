@@ -1,4 +1,4 @@
-def save_article(request):
+def handle_article_form(request):
     if request.method == 'POST':
         form = ArticleForm(request.POST)
         if form.is_valid():

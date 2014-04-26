@@ -40,8 +40,8 @@ section
     == self.code_block('python', 'constraints/example_py.txt')
     br: ul
         li.fragment &laquo;What&raquo; is obscured by &laquo;How&raquo;
-        li.fragment Single Responsibility Principle is violated
         li.fragment Redundant details
+        li.fragment Single Responsibility Principle is violated
 
 section
     h4 If we could get rid of How's once and for all,
