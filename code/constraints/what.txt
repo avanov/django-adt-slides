@@ -1,0 +1,7 @@
+# case 1
+save_article(form.cleaned_data)
+return HttpResponseRedirect('/success/')
+
+# case 2
+form = ArticleForm()
+return render(request, 'article_form.html', {'form': form})

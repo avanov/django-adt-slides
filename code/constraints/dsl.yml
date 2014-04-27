@@ -1,0 +1,7 @@
+---
+view: ArticlesHandler
+GET: article_form
+POST:
+    - validate: articles.ArticleForm
+      view: save_article
+    - view: invalid_article_form

@@ -1,0 +1,18 @@
+@view_defaults(route_name='authentication', renderer='auth_form.html')
+class AuthenticationHandler(object):
+
+    @view_config(request_method='POST', validate_form=EmailAuthForm)
+    def auth_with_email(self):
+        # ...
+
+    @view_config(request_method='POST', validate_form=SMSAuthForm)
+    def auth_with_sms(self):
+        # ...
+
+    @view_config(request_method='POST', validate_form=LoginAuthForm)
+    def auth_with_login(self):
+        # ...
+
+    @view_config(request_method='POST')
+    def on_invalid_form(self):
+        # ...

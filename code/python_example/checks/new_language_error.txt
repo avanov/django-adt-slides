@@ -1,0 +1,3 @@
+ConfigurationError:
+  Case db:articles of <class 'project.articles.types.Language'>
+  is not exhaustive. Here is the variant that is not matched: SPANISH

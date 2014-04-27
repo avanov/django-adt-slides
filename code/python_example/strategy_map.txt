@@ -1,0 +1,5 @@
+GET /articles/de
+{'db:articles': <class 'project.articles.models.GermanArticle'>}
+
+GET /articles/en
+{'db:articles': <class 'project.articles.models.EnglishArticle'>}

@@ -1,0 +1,214 @@
+-inherit base.plim
+
+
+section
+    h3 Declarative Programming
+    h4 &
+    h3 Algebraic Data Types *
+    br: br: br
+    h5 Maxim Avanov
+    h5: a href="https://maximavanov.com/" maximavanov.com
+    br: br: br
+    .pull-right: small * from Django's perspective
+    .pull-right: small `a href="http://moscowdjango.ru/" 19th Moscow Django Meetup`
+
+
+section
+    h2 Our Goal
+    br
+    h4.fragment.pull-left 1. &laquo;Outsource&raquo; boilerplate (i.e. concentrate on important).
+    h4.fragment.pull-left 2. Check as much as possible, and as soon as possible.
+    h4.fragment.pull-left 3. Component coherence.
+
+section
+
+    h2 1. A story of How & What
+    hr: h4 Concentrate on important
+
+section
+    h2 How vs. What
+    == self.code_block('python', 'constraints/example_py.txt')
+
+section
+    h2 How
+    == self.code_block('python', 'constraints/how.txt')
+    h2 What
+    == self.code_block('python', 'constraints/what.txt')
+
+section
+    h3 A few things to worry about
+    == self.code_block('python', 'constraints/example_py.txt')
+    br: ul
+        li.fragment &laquo;What&raquo; is obscured by &laquo;How&raquo;
+        li.fragment redundant details
+        li.fragment Single Responsibility principle is violated
+
+section
+    h4 If we could get rid of How's once and for all,
+    h4 would we miss them?
+
+section
+    h2 Constraint programming
+
+section
+    h2 Tribute to `a href="http://www.pylonsproject.org/" Pyramid`
+    == self.code_block('python', 'constraints/routing_py.txt')
+
+section
+    h2 What it actually means
+    == self.code_block('python', 'constraints/routing_py_explained.txt')
+
+section
+    h2 ...or in other words
+    .fragment
+        == self.code_block('yaml', 'constraints/dsl.yml')
+        == self.code_block('python', 'constraints/routing_py_clean.txt')
+
+section
+    h3 A couple of other examples
+
+section
+    h3 Different ways to do the same thing
+    == self.code_block('python', 'constraints/multiple_forms.txt')
+
+section
+    h3 API versioning
+    == self.code_block('python', 'constraints/config_setup_example.txt')
+    == self.code_block('python', 'constraints/api_version.txt')
+    == self.code_block('python', 'constraints/api_version_alt.txt')
+
+section
+    h2 Algebraic Data Types
+
+
+section
+    h2 OCaml ADT example
+    .fragment
+        hr
+           | Watch a &laquo;Caml Trading&raquo; talk by Yaron Minsky at `br`
+             `a href="http://youtu.be/hKcOkWzj0_s?t=31m6s" http://youtu.be/hKcOkWzj0_s?t=31m6s`
+
+section
+    h2 OCaml ADT example
+    .fragment == self.code_block('ocaml', 'ocaml_adt/two_types.ml')
+    .fragment == self.code_block('ocaml', 'ocaml_adt/instruction.ml')
+    .fragment == self.code_block('ocaml', 'ocaml_adt/filter_by_oid.ml')
+
+section
+    h3 OCaml ADT example
+    == self.code_block('ocaml', 'ocaml_adt/two_types.ml')
+    .fragment == self.code_block('ocaml', 'ocaml_adt/third_type.ml')
+    .fragment == self.code_block('ocaml', 'ocaml_adt/instruction_updated.ml')
+    == self.code_block('ocaml', 'ocaml_adt/filter_by_oid.ml')
+    .fragment == self.code_block('text', 'ocaml_adt/filter_by_oid_warning.txt')
+
+
+section
+    h2 2. Trying to reproduce
+    hr
+    h4 Check as much as possible, and as soon as possible
+
+
+section
+    h2 Python ADT `span.fragment data-fragment-index="0" *`
+    br: br
+    .fragment data-fragment-index="0": small * kind of
+
+section
+    h3 Python ADT example
+    br
+    h4 Models (product types)
+    == self.code_block('python', 'django_adt/models.py')
+
+
+section
+    h3 Python ADT example
+    br
+    h4 Smart Enums (union types)
+    == self.code_block('python', 'django_adt/types.py')
+
+section
+    h3 Python ADT example
+    br
+    h4 Cases (match statement)
+    == self.code_block('python', 'django_adt/logic.py')
+
+section
+    h3 Python ADT example
+    br
+    h4 Cases (2)
+    == self.code_block('python', 'django_adt/logic_alt.py')
+
+
+section
+    h3 3. Use case: multilingual content
+    hr: h4 Component coherence
+
+section
+    h3 Use case
+    br: h4 Define ADT
+    == self.code_block('python', 'python_example/types.py')
+
+section
+    h3 Use case
+    br: h4 Register Models
+    == self.code_block('python', 'python_example/models.py')
+
+section
+    h3 Use case
+    br: h4 Process requests
+    == self.code_block('python', 'python_example/views.py')
+
+
+section
+    h3 Consistency check
+    br: h4 Adding a new language
+    == self.code_block('python', 'python_example/checks/new_language_py.txt')
+    .fragment == self.code_block('text', 'python_example/checks/new_language_error.txt')
+    .fragment == self.code_block('python', 'python_example/checks/new_language_fix.txt')
+
+section
+    h3 Consistency check
+    br: h4 Using undefined variant
+    == self.code_block('python', 'python_example/types.py')
+    == self.code_block('python', 'python_example/checks/undefined_variant_py.txt')
+    .fragment == self.code_block('text', 'python_example/checks/undefined_variant_error.txt')
+
+section
+    h3 Consistency check
+    br: h4 Guard boundaries
+    == self.code_block('python', 'python_example/__init__.py')
+    .fragment == self.code_block('text', 'python_example/checks/rules_re.txt')
+    .fragment == self.code_block('python', 'python_example/checks/new_language_py.txt')
+    .fragment == self.code_block('text', 'python_example/checks/rules_re_extend.txt')
+
+section
+    h3 Use case
+    br: h4 Strategy map
+    == self.code_block('python', 'python_example/checks/match_object.txt')
+    .fragment == self.code_block('text', 'python_example/strategy_map.txt')
+
+section
+    h2 Beyond today's topic
+    hr
+    h4 Things worth mentioning
+    br
+    ul
+        li: a href="https://github.com/lihaoyi/macropy" github.com/lihaoyi/macropy
+        li: a href="https://github.com/benanhalt/PyAlgebraicDataTypes" github.com/benanhalt/PyAlgebraicDataTypes (cons ADT)
+        li: a href="http://youtu.be/nRDC6GtfB4g" &laquo;Say What You Mean&raquo; talk by Ryan Kelly
+
+
+section
+    h2 Thank you
+    br
+    .fragment
+        hr:br: h4 Q & A
+
+section
+    h2 Credits
+    br
+    ul
+        li `a href="http://youtu.be/hKcOkWzj0_s" &laquo;Caml Trading&raquo;` talk by Yaron Minsky
+        li `a href="http://rhetoric.readthedocs.org/en/latest/" Rhetoric Project`
+        li `a href="http://docs.pylonsproject.org/projects/venusian/en/latest/" Venusian Project`
