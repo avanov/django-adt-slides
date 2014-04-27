@@ -107,10 +107,6 @@ section
     h2 2. Trying to reproduce
     hr
     h4 Check as much as possible, and as soon as possible
-    br: ul
-        li.fragment | automatic discovery of missed cases
-        li.fragment | reporting impossible cases
-        li.fragment | preventing redundant cases
 
 
 section
